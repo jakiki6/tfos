@@ -1,0 +1,4 @@
+bits 64
+	cli
+hlt:	hlt
+	jmp short hlt
