@@ -3,6 +3,30 @@ import sys, os
 def b(s):
     return bytes.fromhex(s.lower())
 
+def skip(buf):
+    while True:
+        c = buf.read(1)
+        if len(c) == 0:
+            break
+
+        if not c in " \t\n":  
+            buf.seek(buf.tell() - 1)
+            break
+
+def word(buf):
+    skip(buf)
+
+    w = ""
+    while True:
+        c = buf.read(1)
+
+        if c in " \t\n":
+            break
+
+        w += c
+
+    return w
+
 class Backend(object):
     def __init__(self):
         pass

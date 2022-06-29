@@ -1,4 +1,5 @@
 from backends import *
+from . import immeds
 
 @register
 class X64Backend(Backend):
@@ -17,6 +18,8 @@ class X64Backend(Backend):
         for k, v in self.strings.items():
             dict[k] = binary.tell()
             binary.write(v)
+
+        immeds.apply(imm)
 
         p = binary.tell()
         binary.seek(8, 4)

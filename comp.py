@@ -90,7 +90,7 @@ def compile(content, backend=backends.backends["x64"]):
             backend.compile_num(binary, n)
         except ValueError:
             if w in imm:
-                imm[w](buf, binary, imm, dict)
+                imm[w](buf, binary, imm, dict, backend)
             elif w in dict:
                 backend.compile_ref(binary, dict[w])
             else:
