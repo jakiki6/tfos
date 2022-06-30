@@ -1,10 +1,8 @@
 all: kernel.bin
 	make -C boot
-	for file in $^; do \
-		echfs-utils os.img import $$file $$file; \
-	done
+	dd if=$< of=os.img bs=512 seek=1 conv=notrunc
 
-	qemu-system-x86_64 -hda os.img -enable-kvm -m 512M -D log.txt -d cpu_reset,int
+	qemu-system-x86_64 -hda os.img -m 512M -D log.txt -d cpu_reset,int -machine smm=off
 
 clean:
 	make -C boot clean

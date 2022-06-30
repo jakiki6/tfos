@@ -1,13 +1,9 @@
 all: ../os.img
 
-../os.img: loader.bin stage2.bin
-	qemu-img create $@ 64M
+../os.img: loader.bin
+	qemu-img create $@ 64K
 
-	echfs-utils $@ quick-format 512
-
-	head -c 4 loader.bin | dd of=$@ conv=notrunc
-	dd if=loader.bin of=$@ conv=notrunc bs=1 seek=58 skip=58
-	dd if=stage2.bin of=$@ conv=notrunc bs=1 seek=512
+	dd if=loader.bin of=$@ conv=notrunc bs=512 count=1
 
 %.bin: %.asm
 	nasm -f bin -o $@ $<
