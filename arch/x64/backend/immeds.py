@@ -17,7 +17,7 @@ def end_word(buf, binary, imm, dict, back):
     rel = binary.tell() - target - 4
     p = binary.tell()
     binary.seek(target)
-    binary.write(rel.to_bytes(4, "little", signed=True));
+    binary.write(rel.to_bytes(4, "little", signed=True))
     binary.seek(p)
 imms[";"] = end_word
 
@@ -32,7 +32,7 @@ def then_clause(buf, binary, imm, dict, back):
     rel = binary.tell() - target - 4
     p = binary.tell()
     binary.seek(target)
-    binary.write(rel.to_bytes(4, "little", signed=True));
+    binary.write(rel.to_bytes(4, "little", signed=True))
     binary.seek(p)
 imms["then"] = then_clause
 
@@ -49,6 +49,17 @@ def else_clause(buf, binary, imm, dict, back):
     binary.write(rel.to_bytes(4, "little", signed=True));
     binary.seek(p)
 imms["else"] = else_clause
+
+def begin_clause(buf, binary, imm, dict, back):
+    stack.append(binary.tell())
+imms["begin"] = begin_clause
+
+def again_clause(buf, binary, imm, dict, back):
+    target = stack.pop()
+    rel = target - binary.tell() - 5
+    binary.write(b("E9"))
+    binary.write(rel.to_bytes(4, "little", signed=True))
+imms["again"] = again_clause
 
 def comment(buf, binary, imm, dict, back):
     while word(buf) != ")":
