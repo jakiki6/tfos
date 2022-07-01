@@ -61,6 +61,13 @@ def again_clause(buf, binary, imm, dict, back):
     binary.write(rel.to_bytes(4, "little", signed=True))
 imms["again"] = again_clause
 
+def until_clause(buf, binary, imm, dict, back):
+    target = stack.pop()
+    rel = target - binary.tell() - 15
+    binary.write(b("4883ED0848837D00000F84"))
+    binary.write(rel.to_bytes(4, "little", signed=True))
+imms["until"] = until_clause
+
 def comment(buf, binary, imm, dict, back):
     while word(buf) != ")":
         continue

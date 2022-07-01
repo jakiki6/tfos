@@ -1,4 +1,4 @@
-import os
+import os, subprocess
 
 strings = {}
 
@@ -6,10 +6,9 @@ for root, _, files in os.walk(os.path.join(os.path.dirname(__file__), "asm")):
     for _fn in files:
         fn = os.path.join(root, _fn)
 
-        cmd = f"nasm -f bin -o /tmp/build.bin {fn}"
+        cmd = ["nasm",  "-f", "bin", "-o", "/tmp/build.bin", fn]
         print(cmd)
-        if os.system(cmd):
-            exit(1)
+        subprocess.run(cmd, check=True)
 
         with open("/tmp/build.bin", "rb") as file:
             strings[_fn] = file.read()

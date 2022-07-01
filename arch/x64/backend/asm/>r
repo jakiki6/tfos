@@ -1,0 +1,4 @@
+bits 64
+sub rbp, 8
+push qword [rbp]
+ret
