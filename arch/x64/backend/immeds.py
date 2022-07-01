@@ -25,7 +25,7 @@ def cond_clause(buf, binary, imm, dict, back):
     binary.write(b("4883ED0848837D00000F84"))
     stack.append(binary.tell())
     binary.write(b("00000000"))
-imms["IF"] = cond_clause
+imms["if"] = cond_clause
 
 def then_clause(buf, binary, imm, dict, back):
     target = stack.pop()
@@ -34,7 +34,21 @@ def then_clause(buf, binary, imm, dict, back):
     binary.seek(target)
     binary.write(rel.to_bytes(4, "little", signed=True));
     binary.seek(p)
-imms["THEN"] = then_clause
+imms["then"] = then_clause
+
+def else_clause(buf, binary, imm, dict, back):
+    target = stack.pop()
+
+    binary.write(b("E9"))
+    stack.append(binary.tell())
+    binary.write(b("00000000"))
+
+    rel = binary.tell() - target - 4
+    p = binary.tell()
+    binary.seek(target)
+    binary.write(rel.to_bytes(4, "little", signed=True));
+    binary.seek(p)
+imms["else"] = else_clause
 
 def comment(buf, binary, imm, dict, back):
     while word(buf) != ")":
