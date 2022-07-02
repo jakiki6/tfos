@@ -4,7 +4,7 @@ $b8000 $10000 !
 foo
 
 begin $b8140
-  begin dup dup c@ 1 + swap c! 1 + dup $b8fa0 = until
+  begin dup dup c@ rng + swap c! 1 + dup $b8fa0 = until
 drop again
 
 arch-hlt
