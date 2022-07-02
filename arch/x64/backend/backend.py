@@ -27,20 +27,15 @@ class X64Backend(Backend):
         binary.seek(p)
 
     def compile_num(self, binary, n):
-        if n < 2 ** 8:
-            binary.write(b("4831C0B0"))
-            binary.write(n.to_bytes(1, "little"))
-        elif n < 2 ** 16:
-            binary.write(b("4831C066B8"))
-            binary.write(n.to_bytes(2, "little"))
-        elif n < 2 ** 32:
-            binary.write(b("4831C0B8"))
-            binary.write(n.to_bytes(4, "little"))
+        if -2**31 <= n < 2 ** 31:
+            binary.write(b("48C74500"))
+            binary.write(n.to_bytes(4, "little", signed=True))
         else:
             binary.write(b("48B8"))
             binary.write(n.to_bytes(8, "little"))
+            binary.write(b("48894500"))
 
-        binary.write(b("488945004883C508"))
+        binary.write(b("4883C508"))
 
     def compile_ref(self, binary, ref):
         if ref != 0:
