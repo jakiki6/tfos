@@ -68,6 +68,23 @@ def until_clause(buf, binary, imm, dict, back):
     binary.write(rel.to_bytes(4, "little", signed=True))
 imms["until"] = until_clause
 
+def val_word(buf, binary, imm, dict, back):
+    binary.write(b("EB11"))
+    dict[word(buf)] = binary.tell()
+    binary.write(b("48B8"))
+    binary.write(bytes(8))
+    binary.write(b("488945004883C508C3"))
+imms["val"] = val_word
+
+def to_word(buf, binary, imm, dict, back):
+    back.compile_num(binary, dict[word(buf)] + 2)
+    back.compile_ref(binary, dict["!"])
+imms["to"] = to_word
+
+def hyphen_word(buf, binary, imm, dict, back):
+    back.compile_num(binary, dict[word(buf)])
+imms["'"] = hyphen_word
+
 def comment(buf, binary, imm, dict, back):
     while word(buf) != ")":
         continue

@@ -1,0 +1,8 @@
+bits 64
+mov rcx, qword [rbp-8]
+mov rbx, qword [rbp-16]
+mov rax, qword [rbp-24]
+mov qword [rbp-8], rbx
+mov qword [rbp-16], rax
+mov qword [rbp-24], rcx
+ret
