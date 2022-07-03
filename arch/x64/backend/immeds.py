@@ -85,6 +85,40 @@ def hyphen_word(buf, binary, imm, dict, back):
     back.compile_num(binary, dict[word(buf)])
 imms["'"] = hyphen_word
 
+def str_lit(buf, binary, imm, dict, back):
+    content = ""
+    escape = False
+
+    while True:
+        c = buf.read(1)
+
+        if not escape and c == "\"":
+            break
+        elif not escape and c == "\\":
+            escape = True
+        elif escape:
+            if c == "\\":
+                content += c
+            elif c == "n":
+                content += "\n"
+            elif c == "t":
+                content += "\t"
+        else:
+            content += c
+
+    content = content.encode("utf-8") + b"\x00"
+
+    if len(content) < 128:
+        binary.write(b("EB"))
+        binary.write(len(content).to_bytes(1, "little"))
+    else:
+        binary.write(b("E9"))
+        binary.write(len(content).to_bytes(4, "little"))
+    addr = binary.tell()
+    binary.write(content)
+    back.compile_num(binary, addr)
+imms["LIT\""] = str_lit
+
 def comment(buf, binary, imm, dict, back):
     while word(buf) != ")":
         continue

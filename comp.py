@@ -68,6 +68,8 @@ def compile(content, backend=backends.backends["x64"]):
 
     while not atend(buf):
         w = word(buf)
+        if len(w) == 0:
+            break
 
         try:
             _w = w
