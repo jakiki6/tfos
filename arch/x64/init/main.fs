@@ -10,10 +10,12 @@ LIT" booting tfos..." print
 $f0000 $b8140 480 mem-copy
 
 begin
+  cookie-push
   $100
   begin $b8320
     begin dup rng swap c! 1+ dup $b8fa0 = until
-  drop 1- dup not until
+  drop 1- dup not until drop
 
   $b8090 @ 1+ $b8090 !
+  cookie-pop
 again

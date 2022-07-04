@@ -1,4 +1,5 @@
 from backends import b, word, backends
+import random
 
 imms = {}
 
@@ -118,6 +119,15 @@ def str_lit(buf, binary, imm, dict, back):
     binary.write(content)
     back.compile_num(binary, addr)
 imms["LIT\""] = str_lit
+
+def cookie_push_word(buf, binary, imm, dict, back):
+    binary.write(b("48B8"))
+    addr = binary.tell()
+    binary.write(random.randbytes(8))
+    binary.write(b("488945004883C50848B8"))
+    binary.write(addr.to_bytes(8, "little"))
+    binary.write(b("488945004883C508"))
+imms["cookie-push"] = cookie_push_word
 
 def comment(buf, binary, imm, dict, back):
     while word(buf) != ")":
