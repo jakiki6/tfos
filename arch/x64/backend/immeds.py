@@ -129,11 +129,6 @@ def cookie_push_word(buf, binary, imm, dict, back):
     binary.write(b("488945004883C508"))
 imms["cookie-push"] = cookie_push_word
 
-def comment(buf, binary, imm, dict, back):
-    while word(buf) != ")":
-        continue
-imms["("] = comment
-
 def apply(imm):
     for k, v in imms.items():
         imm[k] = v

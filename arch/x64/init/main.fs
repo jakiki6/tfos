@@ -1,8 +1,11 @@
+include dev/serial.fs
+
 val fb
 $b8000 to fb
 
+serial-init
 : print begin
-  dup c@ fb c! fb 1+ $1f c! fb 2 + to fb 1+ dup c@ not
+  dup c@ dup serial-out fb c! fb 1+ $1f c! fb 2 + to fb 1+ dup c@ not
 until ;
 
 LIT" booting tfos..." print

@@ -1,5 +1,5 @@
 import io
-import backends
+import backends, arch
 
 class BinaryBuffer(object):
     def __init__(self, content=b""):
@@ -50,23 +50,16 @@ def word(buf):
 
     return w
 
-def atend(buf):
-    c = buf.read(1)
-    if len(c) == 0:
-        return True
-
-    buf.seek(buf.tell() - 1)
-    return False
-
 def compile(content, backend=backends.backends["x64"]):
     buf = io.StringIO(content)
     binary = BinaryBuffer()
     imm = {}
     dict = {}
 
+    arch.init(binary, imm, dict)
     backend.init(binary, imm, dict)
 
-    while not atend(buf):
+    while True:
         w = word(buf)
         if len(w) == 0:
             break

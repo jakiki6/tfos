@@ -2,7 +2,7 @@ all: kernel.bin
 	make -C boot
 	dd if=$< of=os.img bs=512 seek=1 conv=notrunc
 
-	qemu-system-x86_64 -hda os.img -m 512M -D log.txt -d cpu_reset,int -machine smm=off
+	qemu-system-x86_64 -hda os.img -m 512M -D log.txt -d cpu_reset,int -machine smm=off -serial stdio
 
 clean:
 	make -C boot clean
