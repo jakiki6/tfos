@@ -1,0 +1,12 @@
+	bits 64
+	; our idt is fine .. we do a little tweaking
+	lidt [idt]
+
+	; byeeee
+	int 0x69
+
+	; how tf
+	ret
+
+idt:    dw 0
+        dq 0

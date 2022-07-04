@@ -4,6 +4,5 @@ cmp qword [rbp-8], 0
 jne .skip
 inc ebx
 .skip:
-sub rbp, 8
 mov qword [rbp-8], rbx
 ret
