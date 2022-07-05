@@ -1,0 +1,7 @@
+bits 64
+xor rdx, rdx
+mov rax, qword [rbp-16]
+div qword [rbp-8]
+mov qword [rbp-16], rdx
+sub rbp, 8
+ret
