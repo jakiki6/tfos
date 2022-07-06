@@ -34,10 +34,10 @@ class Backend(object):
     def init(self, binary, imm, dict):
         pass
 
-    def compile_num(self, binary, n):
+    def compile_num(self, binary, n, force_big=False):
         pass
 
-    def compile_ref(self, binary, ref):
+    def compile_ref(self, binary, ref, force_big=False):
         pass
 
     def link_ref(self, binary, addr, ref):

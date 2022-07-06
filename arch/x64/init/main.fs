@@ -2,8 +2,8 @@ include kernel/base.fs
 
 include arch/x64/dev/serial.fs
 
-$b8000 to fb
 val fb
+$b8000 to fb
 
 serial-init
 : print begin
