@@ -55,6 +55,7 @@ def compile(content, backend=backends.backends["x64"]):
     binary = BinaryBuffer()
     imm = {}
     dict = {}
+    links = {}
 
     arch.init(binary, imm, dict)
     backend.init(binary, imm, dict)
@@ -85,12 +86,19 @@ def compile(content, backend=backends.backends["x64"]):
             backend.compile_num(binary, n)
         except ValueError:
             if w in imm:
-                imm[w](buf, binary, imm, dict, backend)
+                imm[w](buf, binary, imm, dict, links, backend)
             elif w in dict:
                 backend.compile_ref(binary, dict[w])
             else:
-                print(f"Word '{w}' not found")
-                exit(1)
+                links[binary.tell()] = (w, "ref")
+                backend.compile_ref(binary, 0, force_big=True)
+
+    for addr, link in links.items():
+        if not link[0] in dict:
+            print(f"Unknown reference to word '{link[0]}'")
+            exit(1)
+
+        backend.link(binary, addr, dict[link[0]], link[1])
 
     binary.reset()
     return binary.read()

@@ -40,6 +40,9 @@ class Backend(object):
     def compile_ref(self, binary, ref):
         pass
 
+    def link_ref(self, binary, addr, ref):
+        pass
+
 backends = {}
 def register(cls):
     backends[cls.name] = cls()

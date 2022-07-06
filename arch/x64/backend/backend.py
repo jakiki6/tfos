@@ -26,8 +26,8 @@ class X64Backend(Backend):
         binary.write(p.to_bytes(8, "little"))
         binary.seek(p)
 
-    def compile_num(self, binary, n):
-        if -2**31 <= n < 2 ** 31:
+    def compile_num(self, binary, n, force_big=False):
+        if -2**31 <= n < 2 ** 31 and not force_big:
             binary.write(b("48C74500"))
             binary.write(n.to_bytes(4, "little", signed=True))
         else:
@@ -37,8 +37,8 @@ class X64Backend(Backend):
 
         binary.write(b("4883C508"))
 
-    def compile_ref(self, binary, ref):
-        if ref != 0:
+    def compile_ref(self, binary, ref, force_big=False):
+        if not force_big:
             offset = ref - binary.tell() - 5
             if not (offset < (-2 ** 31) or offset >= (2 ** 31)):
                 binary.write(b("E8"))
@@ -48,3 +48,16 @@ class X64Backend(Backend):
         binary.write(b("48B8"))
         binary.write(ref.to_bytes(8, "little"))
         binary.write(b("FFD0"))
+
+    def link(self, binary, addr, ref, type):
+        binary.seek(addr)
+
+        binary.write(b("48B8"))
+        offset = int.from_bytes(binary.read(8), "little")
+        binary.seek(binary.tell() - 8)
+        binary.write(((ref + offset) & (2 ** 64 - 1)).to_bytes(8, "little"))
+
+        if type == "ref":
+            binary.write(b("FFD0"))
+        elif type == "num":
+            binary.write(b("488945004883C508"))

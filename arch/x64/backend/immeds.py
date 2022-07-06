@@ -5,14 +5,14 @@ imms = {}
 
 stack = []
 
-def define_word(buf, binary, imm, dict, back):
+def define_word(buf, binary, imm, dict, links, back):
     binary.write(b("E9"))
     stack.append(binary.tell())
     binary.write(b("00000000"))
     dict[word(buf)] = binary.tell()
 imms[":"] = define_word
 
-def end_word(buf, binary, imm, dict, back):
+def end_word(buf, binary, imm, dict, links, back):
     binary.write(b("C3"))
     target = stack.pop()
     rel = binary.tell() - target - 4
@@ -22,13 +22,13 @@ def end_word(buf, binary, imm, dict, back):
     binary.seek(p)
 imms[";"] = end_word
 
-def cond_clause(buf, binary, imm, dict, back):
+def cond_clause(buf, binary, imm, dict, links, back):
     binary.write(b("4883ED0848837D00000F84"))
     stack.append(binary.tell())
     binary.write(b("00000000"))
 imms["if"] = cond_clause
 
-def then_clause(buf, binary, imm, dict, back):
+def then_clause(buf, binary, imm, dict, links, back):
     target = stack.pop()
     rel = binary.tell() - target - 4
     p = binary.tell()
@@ -37,7 +37,7 @@ def then_clause(buf, binary, imm, dict, back):
     binary.seek(p)
 imms["then"] = then_clause
 
-def else_clause(buf, binary, imm, dict, back):
+def else_clause(buf, binary, imm, dict, links, back):
     target = stack.pop()
 
     binary.write(b("E9"))
@@ -51,42 +51,48 @@ def else_clause(buf, binary, imm, dict, back):
     binary.seek(p)
 imms["else"] = else_clause
 
-def begin_clause(buf, binary, imm, dict, back):
+def begin_clause(buf, binary, imm, dict, links, back):
     stack.append(binary.tell())
 imms["begin"] = begin_clause
 
-def again_clause(buf, binary, imm, dict, back):
+def again_clause(buf, binary, imm, dict, links, back):
     target = stack.pop()
     rel = target - binary.tell() - 5
     binary.write(b("E9"))
     binary.write(rel.to_bytes(4, "little", signed=True))
 imms["again"] = again_clause
 
-def until_clause(buf, binary, imm, dict, back):
+def until_clause(buf, binary, imm, dict, links, back):
     target = stack.pop()
     rel = target - binary.tell() - 15
     binary.write(b("4883ED0848837D00000F84"))
     binary.write(rel.to_bytes(4, "little", signed=True))
 imms["until"] = until_clause
 
-def val_word(buf, binary, imm, dict, back):
-    binary.write(b("EB11"))
+def val_word(buf, binary, imm, dict, links, back):
+    binary.write(b("EB13"))
     dict[word(buf)] = binary.tell()
     binary.write(b("48B8"))
     binary.write(bytes(8))
     binary.write(b("488945004883C508C3"))
 imms["val"] = val_word
 
-def to_word(buf, binary, imm, dict, back):
-    back.compile_num(binary, dict[word(buf)] + 2)
+def to_word(buf, binary, imm, dict, links, back):
+    name = word(buf)
+    if name in dict:
+        back.compile_num(binary, dict[name] + 2)
+    else:
+        links[binary.tell()] = (name, "num")
+        back.compile_num(binary, 2, force_big=True)
+
     back.compile_ref(binary, dict["!"])
 imms["to"] = to_word
 
-def hyphen_word(buf, binary, imm, dict, back):
+def hyphen_word(buf, binary, imm, dict, links, back):
     back.compile_num(binary, dict[word(buf)])
 imms["'"] = hyphen_word
 
-def str_lit(buf, binary, imm, dict, back):
+def str_lit(buf, binary, imm, dict, links, back):
     content = ""
     escape = False
 
@@ -120,7 +126,7 @@ def str_lit(buf, binary, imm, dict, back):
     back.compile_num(binary, addr)
 imms["LIT\""] = str_lit
 
-def cookie_push_word(buf, binary, imm, dict, back):
+def cookie_push_word(buf, binary, imm, dict, links, back):
     binary.write(b("48B8"))
     addr = binary.tell()
     binary.write(random.randbytes(8))

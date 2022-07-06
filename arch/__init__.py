@@ -6,12 +6,12 @@ imms = {}
 def init(binary, imm, dict):
     apply(imm)
 
-def comment(buf, binary, imm, dict, back):
+def comment(buf, binary, imm, dict, links, back):
     while word(buf) != ")":
         continue
 imms["("] = comment
 
-def include(buf, binary, imm, dict, back):
+def include(buf, binary, imm, dict, links, back):
     filename = word(buf)
     with open(filename, "r") as file:
         content = file.read() + "\n" + buf.read()
