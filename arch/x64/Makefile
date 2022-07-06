@@ -10,6 +10,6 @@ clean:
 	rm os.img log.txt kernel.bin 2> /dev/null || true
 
 kernel.bin:
-	python3 ../../main.py init/main.fs $@
+	python3 ../../main.py arch/x64/init/main.fs $@
 
 .PHONY: all clean

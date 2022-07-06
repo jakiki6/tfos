@@ -1,4 +1,4 @@
-include dev/serial.fs
+include arch/x64/dev/serial.fs
 
 val fb
 $b8000 to fb
