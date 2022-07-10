@@ -12,4 +12,4 @@ val cpu-gdt-desc
 
   cpu-gdt-tbl 24 + to cpu-gdt-desc
 
-  cpu-gdt-desc arch-lidt ;
+  cpu-gdt-desc arch-lgdt ;
