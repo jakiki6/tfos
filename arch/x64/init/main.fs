@@ -1,6 +1,9 @@
 include kernel/base.fs
 
+include arch/x64/cpu/gdt.fs
 include arch/x64/dev/serial.fs
+
+cpu-gdt-init
 
 val fb
 $b8000 to fb

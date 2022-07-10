@@ -89,7 +89,7 @@ gdt:
 .data:	dq 0x0000920000000000		; 64 bit rw-
 .desc:
 	dw gdt.desc - gdt - 1
-	dd gdt
+	dq gdt
 
 	bits 64
 long_mode:
