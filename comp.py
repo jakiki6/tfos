@@ -1,4 +1,4 @@
-import io
+import io, os
 import backends, arch
 
 class BinaryBuffer(object):
@@ -99,6 +99,10 @@ def compile(content, backend=backends.backends["x64"]):
             exit(1)
 
         backend.link(binary, addr, dict[link[0]], link[1])
+
+    if "DEBUG" in os.environ:
+        for k, v in dict.items():
+            print(k, hex(v))
 
     binary.reset()
     return binary.read()

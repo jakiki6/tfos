@@ -1,0 +1,5 @@
+bits 64
+mov rcx, qword [rbp-8]
+shl qword [rbp-16], cl
+sub rbp, 8
+ret

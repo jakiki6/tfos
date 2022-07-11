@@ -1,0 +1,5 @@
+bits 64
+xchg rsp, rbp
+add qword [rbp], 4
+xchg rsp, rbp
+iretq
