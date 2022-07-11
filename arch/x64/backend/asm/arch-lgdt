@@ -2,4 +2,15 @@ bits 64
 mov rbx, qword [rbp-8]
 lgdt [rbx]
 sub rbp, 8
-ret
+
+mov ax, 0x10
+mov ds, ax
+mov es, ax
+mov ss, ax
+mov fs, ax
+mov gs, ax
+
+pop rax
+push 0x08
+push rax
+retfq
