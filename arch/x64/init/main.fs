@@ -2,15 +2,18 @@ include kernel/base.fs
 
 include arch/x64/cpu/gdt.fs
 include arch/x64/cpu/idt.fs
+include arch/x64/dev/pic.fs
 include arch/x64/dev/serial.fs
 
 cpu-gdt-init
 cpu-idt-init
 
+dev-pic-init
+serial-init
+
 val fb
 $b8000 to fb
 
-serial-init
 : print begin
   dup c@ dup serial-out fb c! fb 1+ $1f c! fb 2 + to fb 1+ dup c@ not
 until ;

@@ -8,9 +8,10 @@ val cpu-idt-desc
   4095 cpu-idt-desc w!
   cpu-idt-tbl cpu-idt-desc 2 + !
 
-  $00 ' arch-int-nop 0 cpu-idt-register
+  $00 ' arch-trap-nop 0 cpu-idt-register
+  $80 ' arch-int-keyboard 1 cpu-idt-register
 
-  cpu-idt-desc arch-lidt 0 0 / ;
+  cpu-idt-desc arch-lidt arch-sti ;
 
 : cpu-idt-register ( id addr type -- )
   rot< 4 << cpu-idt-tbl + ( base address )

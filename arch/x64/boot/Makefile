@@ -1,7 +1,7 @@
 all: ../os.img
 
 ../os.img: loader.bin
-	qemu-img create $@ 64K
+	fallocate --length 64K $@
 
 	dd if=loader.bin of=$@ conv=notrunc bs=512 count=1
 
