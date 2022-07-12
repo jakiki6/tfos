@@ -9,8 +9,6 @@ val cpu-idt-desc
   cpu-idt-tbl cpu-idt-desc 2 + !
 
   $00 ' arch-trap-nop 0 cpu-idt-register
-  $80 ' arch-int-nop 1 cpu-idt-register
-  $81 ' arch-int-keyboard 1 cpu-idt-register
 
   cpu-idt-desc arch-lidt arch-sti ;
 

@@ -89,7 +89,12 @@ def to_word(buf, binary, imm, dict, links, back):
 imms["to"] = to_word
 
 def hyphen_word(buf, binary, imm, dict, links, back):
-    back.compile_num(binary, dict[word(buf)])
+    name = word(buf)
+    if name in dict:
+        back.compile_num(binary, dict[name])
+    else:
+        links[binary.tell()] = (name, "num")
+        back.compile_num(binary, 0, force_big=True)
 imms["'"] = hyphen_word
 
 def str_lit(buf, binary, imm, dict, links, back):

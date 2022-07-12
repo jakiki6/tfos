@@ -7,6 +7,6 @@
   $02 $a1 port-out
   $01 $21 port-out ( mode )
   $01 $a1 port-out 
-  $fc $21 port-out
+  $fe $21 port-out
   $ff $a1 port-out
 ;

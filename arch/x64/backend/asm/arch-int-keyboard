@@ -3,7 +3,7 @@ inc r15
 
 push rax
 in al, 0x60
-mov byte [0xb8068], al
+inc byte [0xb8068]
 
 mov al, 0x20
 out 0x20, al
