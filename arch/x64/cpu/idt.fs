@@ -10,7 +10,7 @@ val cpu-idt-desc
 
   $00 ' arch-trap-nop 0 cpu-idt-register
 
-  cpu-idt-desc arch-lidt arch-sti ;
+  cpu-idt-desc arch-lidt ;
 
 : cpu-idt-register ( id addr type -- )
   rot< 4 << cpu-idt-tbl + ( base address )

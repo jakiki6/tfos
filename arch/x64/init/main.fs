@@ -8,10 +8,14 @@ include arch/x64/dev/serial.fs
 
 cpu-gdt-init
 cpu-idt-init
+
 cpu-sched-init
+sched-init
 
 dev-pic-init
 serial-init
+
+cpu-irq-enable
 
 val fb
 $b8000 to fb
@@ -27,6 +31,11 @@ val ptr
 $ffff5 to ptr
 $b8078 to fb
 8 begin ptr c@ fb c! ptr 1+ to ptr fb 2 + to fb 1- dup 0 = until drop
+
+: foo1 begin $41 $b8068 c! again ;
+: foo2 begin $42 $b8068 c! again ;
+
+( ' foo1 sched-add )
 
 begin
   cookie-push
