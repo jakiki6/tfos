@@ -15,10 +15,8 @@ val sched-head
 : sched-add ( addr -- )
   cpu-irq-disable
   cpu-sched-add
-  16 mem-alloc dup
-    sched-head 8 + dup @ rot> !
-    swap to sched-head
-    sched-head 8 + !
-    sched-head !
+  16 mem-alloc dup rot< ( a m m )
+    sched-head 8 + @ 8 + ! ( a m )
+    !
   cpu-irq-enable
 ;

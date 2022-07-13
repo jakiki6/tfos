@@ -35,7 +35,7 @@ $b8078 to fb
 : foo1 begin $41 $b8068 c! again ;
 : foo2 begin $42 $b8068 c! again ;
 
-( ' foo1 sched-add )
+' arch-hlt sched-add
 
 begin
   cookie-push
