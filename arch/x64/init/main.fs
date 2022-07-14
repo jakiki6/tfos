@@ -3,6 +3,7 @@ include kernel/base.fs
 include arch/x64/cpu/gdt.fs
 include arch/x64/cpu/idt.fs
 include arch/x64/cpu/sched.fs
+include arch/x64/dev/pit.fs
 include arch/x64/dev/pic.fs
 include arch/x64/dev/serial.fs
 
@@ -12,6 +13,7 @@ cpu-idt-init
 cpu-sched-init
 sched-init
 
+dev-pit-init
 dev-pic-init
 serial-init
 
