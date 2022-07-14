@@ -1,4 +1,6 @@
 bits 64
 sub rbp, 8
+pop rax
 push qword [rbp]
+push rax
 ret

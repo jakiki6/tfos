@@ -24,7 +24,7 @@ $b8000 to fb
   dup c@ dup serial-out fb c! fb 1+ $1f c! fb 2 + to fb 1+ dup c@ not
 until ;
 
-LIT" booting tfos..." print
+LIT" booting tfos..." print $0a serial-out
 
 $f0000 $b8140 480 mem-copy
 val ptr
@@ -35,7 +35,8 @@ $b8078 to fb
 : foo1 begin $41 $b8068 c! again ;
 : foo2 begin $42 $b8068 c! again ;
 
-' arch-hlt sched-add
+' foo1 sched-add
+' foo2 sched-add
 
 begin
   cookie-push

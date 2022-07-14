@@ -1,0 +1,5 @@
+bits 64
+mov rax, qword [rsp]
+mov qword [rbp], rax
+add rbp, 8
+ret

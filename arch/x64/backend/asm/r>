@@ -1,3 +1,6 @@
 bits 64
+pop rax
 pop qword [rbp]
+push rax
 add rbp, 8
+ret

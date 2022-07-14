@@ -69,6 +69,14 @@ def until_clause(buf, binary, imm, dict, links, back):
     binary.write(rel.to_bytes(4, "little", signed=True))
 imms["until"] = until_clause
 
+def next_clause(buf, binary, imm, dict, links, back):
+    target = stack.pop() 
+    rel = target - binary.tell() - 10
+    binary.write(b("48FF0C240F85"))
+    binary.write(rel.to_bytes(4, "little", signed=True))
+    binary.write(b("58"))
+imms["next"] = next_clause
+
 def val_word(buf, binary, imm, dict, links, back):
     binary.write(b("EB13"))
     dict[word(buf)] = binary.tell()
