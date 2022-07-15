@@ -17,6 +17,8 @@ entry:
 .retry:	int 0x13
 	jc .retry
 
+	call vesa_setup
+
 jump:
 	in al, 0x92			; enable A20 line
 	or al, 0x02
@@ -116,6 +118,9 @@ long_mode:
 	mov rsp, 0x210000
 	mov rbp, 0x200000
 
+	mov qword [rbp], handover
+	add rbp, 8
+
 	jmp 0x10000
 
 	bits 16
@@ -139,3 +144,8 @@ DAP:
 
 idt:	dw 0
 	dd 0
+
+handover:
+.vesa:	dq vbe_mode_info
+
+%include "vesa.asm"
