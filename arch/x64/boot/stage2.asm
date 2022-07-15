@@ -1,11 +1,8 @@
-org 0x7c00
+org 0x2000
 
 %define PAGING_BUFFER 0x8000
 
-
-entry:	cli
-	jmp 0x0000:.fix_cs
-.fix_cs:
+entry:
 	push cs
 	pop ss
 	mov sp, 0xffff
@@ -20,7 +17,8 @@ entry:	cli
 .retry:	int 0x13
 	jc .retry
 
-jump:	in al, 0x92			; enable A20 line
+jump:
+	in al, 0x92			; enable A20 line
 	or al, 0x02
 	out 0x92, al
 
@@ -80,7 +78,7 @@ jump:	in al, 0x92			; enable A20 line
 
 	lgdt [gdt.desc]			; load gdt
 
-	jmp 0x08:long_mode		; JUMP
+	jmp 0x08:long_mode	; JUMP
 
 	align 8
 gdt:
@@ -134,13 +132,10 @@ DAP:
 .offset_segment:  
     dw 0x1000   ; offset
 .lba_lower:
-    dd 1	; lba
+    dd 4	; lba
 .lba_upper:
     dd 0	; lba
 .end:
 
 idt:	dw 0
 	dd 0
-
-times 510 - ($ - $$) nop
-db 0x55, 0xaa

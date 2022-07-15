@@ -10,7 +10,6 @@ val sched-head
   sched-head !
   sched-head 8 + @ to sched-head
   sched-head @
-(  dup debug-int )
 ;
 
 : sched-add ( addr -- )
