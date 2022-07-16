@@ -4,12 +4,16 @@
     $0f and consts-hextable + c@ serial-out
 ;
 
-: debug-int ( i -- )
-  dup bswap
+: debug-int# ( i -- )
+  bswap
     8 >r begin
       dup debug-hex-one
       8 >>
     next drop
+;
+
+: debug-int ( i -- )
+  debug-int#
   $0a serial-out
 ;
 

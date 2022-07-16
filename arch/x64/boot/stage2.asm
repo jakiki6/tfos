@@ -19,6 +19,16 @@ entry:
 
 	call vesa_setup
 
+	push es
+	push 0x2000
+	pop es
+	xor di, di
+	call e820_setup
+    jc $
+	pop es
+
+	mov word [handover.mem_count], bp
+
 jump:
 	in al, 0x92			; enable A20 line
 	or al, 0x02
@@ -147,5 +157,9 @@ idt:	dw 0
 
 handover:
 .vesa:	dq vbe_mode_info
+.mem:	dq 0x20000
+.mem_count:
+		dw 0
 
 %include "vesa.asm"
+%include "memmap.asm"
