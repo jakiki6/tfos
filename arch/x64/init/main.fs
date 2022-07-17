@@ -13,6 +13,9 @@ include arch/x64/dev/serial.fs
 include arch/x64/dev/vesa.fs
 
 cpu-mem-init
+serial-init
+cpu-mem-dump
+
 
 cpu-gdt-init
 cpu-idt-init
@@ -22,7 +25,6 @@ sched-init
 
 dev-pit-init
 dev-pic-init
-serial-init
 
 fb-init
 ( 255 255 255 69 69 fb-draw-one )

@@ -77,6 +77,10 @@ def next_clause(buf, binary, imm, dict, links, back):
     binary.write(b("58"))
 imms["next"] = next_clause
 
+def exit_word(buf, binary, imm, dict, links, back):
+    binary.write(b("C3"))
+imms["exit"] = exit_word
+
 def val_word(buf, binary, imm, dict, links, back):
     binary.write(b("EB13"))
     dict[word(buf)] = binary.tell()
