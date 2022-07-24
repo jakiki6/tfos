@@ -55,6 +55,21 @@ def begin_clause(buf, binary, imm, dict, links, back):
     stack.append(binary.tell())
 imms["begin"] = begin_clause
 
+def do_clause(buf, binary, imm, dict, links, back):
+    back.compile_ref(binary, dict["dup"])
+    back.compile_ref(binary, dict[">r"])
+    back.compile_ref(binary, dict[">r"])
+    stack.append(binary.tell())
+imms["do"] = do_clause
+
+def loop_clause(buf, binary, imm, dict, links, back):
+    target = stack.pop() 
+    rel = target - binary.tell() - 10
+    binary.write(b("48FF0C240F85"))
+    binary.write(rel.to_bytes(4, "little", signed=True))
+    binary.write(b("5858")) 
+imms["loop"] = loop_clause
+
 def again_clause(buf, binary, imm, dict, links, back):
     target = stack.pop()
     rel = target - binary.tell() - 5

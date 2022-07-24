@@ -56,12 +56,12 @@ jump:
 	lea di, [di + 0x2000]
 	mov eax, 0b10000011
 
+	mov ecx, 512
 .loop_pt:
-	mov [es:di], eax
-	add eax, 0x1000
+	mov [es:di], eax ;eax
+	add eax, 0x200000
 	add di, 8
-	cmp eax, 0x200000
-	jb .loop_pt
+	loop .loop_pt
 
 	pop di
 
@@ -125,8 +125,8 @@ long_mode:
 	mov al, 0x20                    ; bit 5 -> disable cursor
 	out dx, al
 
-	mov rsp, 0x210000
-	mov rbp, 0x200000
+	mov rsp, 0x120000
+	mov rbp, 0x110000
 
 	mov qword [rbp], handover
 	add rbp, 8
