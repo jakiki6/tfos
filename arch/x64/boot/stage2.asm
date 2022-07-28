@@ -110,21 +110,6 @@ long_mode:
 	mov gs, ax
 	mov ss, ax
 
-	mov rdi, 0xb8000
-	push rdi
-	mov rcx, 500
-	mov rax, 0x1f201f201f201f20
-	rep stosq
-	pop rdi
-
-	mov dx, 0x03d4
-	mov al, 0x0a                    ; cursor shape register
-	out dx, al
-
-	inc dx
-	mov al, 0x20                    ; bit 5 -> disable cursor
-	out dx, al
-
 	mov rsp, 0x120000
 	mov rbp, 0x110000
 
