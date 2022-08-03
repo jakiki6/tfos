@@ -1,0 +1,7 @@
+bits 64
+wbinvd
+rdtsc
+shr rax, 7
+mov qword [rbp], rax
+add rbp, 8
+ret

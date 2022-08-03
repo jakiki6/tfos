@@ -19,6 +19,8 @@ cpu-paging-init
 cpu-gdt-init
 cpu-idt-init
 
+base-init
+
 cpu-sched-init
 sched-init
 
@@ -36,5 +38,14 @@ cpu-irq-enable
 until ;
 
 LIT" booting tfos..." print $0a serial-out
+
+begin
+  rng $ff and
+  rng $ff and
+  rng $ff and
+  rng fb-info-width %
+  rng fb-info-height %
+  fb-draw-one
+again
 
 arch-hlt

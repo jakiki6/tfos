@@ -1,8 +1,0 @@
-bits 64
-rdtsc
-shr rax, 3
-xor rbx, rbx
-mov bl, al
-mov qword [rbp], rbx
-add rbp, 8
-ret
