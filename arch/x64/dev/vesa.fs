@@ -11,7 +11,15 @@ val fb-info-addr
   fb-vesa-info 20 + w@ to fb-info-height
   fb-vesa-info 40 + @ to fb-info-addr
 
-  255 255 255 10 10 fb-draw-one
+  0 begin
+    0 begin
+      over over 255 rot> 255 rot> 255 rot> fb-draw-one
+
+      1+ dup fb-info-height =
+    until drop
+
+    1+ dup fb-info-width =
+  until drop
 ;
 
 : fb-draw-one ( r g b x y -- )

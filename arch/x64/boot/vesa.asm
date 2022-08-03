@@ -15,7 +15,7 @@ vesa_setup:
     mov di, word [vbe_info.video_mode_offset]
 .loop:
     cmp word [es:di], 0xffff
-    je $
+    je .done
 
     push es
     push di
@@ -35,20 +35,50 @@ vesa_setup:
     cmp byte [vbe_mode_info.bpp], 24
     jne .back
 
-    cmp word [vbe_mode_info.width], 1024
-    jne .back
+	mov ax, word [best_w]
+    cmp word [vbe_mode_info.width], ax
+    jbe .back
+	cmp word [vbe_mode_info.width], 1024
+	ja .back
 
-    cmp word [vbe_mode_info.height], 768
-    jne .back
+	mov ax, word [best_h]
+    cmp word [vbe_mode_info.height], ax
+    jbe .back
+	cmp word [vbe_mode_info.height], 768
+	ja .back
 
+	mov ax, word [vbe_mode_info.width]
+	mov word [best_w], ax
+	mov ax, word [vbe_mode_info.height]
+    mov word [best_h], ax
+	mov word [best_di], di
+
+.back:
+	add di, 2
+	jmp .loop
+
+.done:
+	cmp word [best_w], 0
+	je $
+
+	mov di, word [best_di]
     mov ax, 0x4f02
     mov bx, word [es:di]
     int 0x10
 
+	mov ax, 0x4f01
+    mov cx, word [es:di]
+
+	push es
+	push 0
+	pop es
+
+	mov di, vbe_mode_info
+    int 0x10
+
+	pop es
+
     ret
-.back:
-    add di, 2
-    jmp .loop
 
 vbe_mode_info:
 times 16 db 0
@@ -80,3 +110,8 @@ vbe_info:
 .project_rev_seg: dw 0
 times 222 db 0
 .oem_data times 256 db 0
+
+best_h:	dw 0
+best_w:	dw 0
+best_di:
+	dw 0

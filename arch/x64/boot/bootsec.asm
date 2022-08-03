@@ -5,14 +5,32 @@ entry:
 .fix_cs:
 	mov sp, 0x8000
 
+	push ds
+	push 0xd800
+	pop ds
+	mov byte [0], '1'
+	pop ds
+
 	cli
 	mov ah, 0x42
 	mov si, DAP
 .retry:
 	int 0x13
-	jc .retry
+	jc .error
 
 	jmp 0x2000
+
+.error:
+	mov ah, 1
+	int 0x13
+	push 0xd800
+    pop ds
+    mov byte [0], ah
+
+	cli
+.hlt:
+	hlt
+	jmp .hlt
 
 DAP:
 .header:
