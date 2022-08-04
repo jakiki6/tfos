@@ -2,13 +2,13 @@ vesa_setup:
     mov ax, 0x4f00
     mov di, vbe_info
     int 0x10
-    jc $
+    jc .no_vesa
 
     cmp ax, 0x4f 
-    jne $
+    jne .no_vesa
 
     cmp dword [vbe_info.signature], 'VESA' 
-    jne $
+    jne .no_vesa
     
     mov ax, word [vbe_info.video_mode_seg]
     mov es, ax
@@ -33,7 +33,7 @@ vesa_setup:
     pop es
 
     cmp byte [vbe_mode_info.bpp], 24
-    jne .back
+    jb .back
 
 	mov ax, word [best_w]
     cmp word [vbe_mode_info.width], ax
@@ -59,14 +59,10 @@ vesa_setup:
 
 .done:
 	cmp word [best_w], 0
-	je $
-
-	mov di, word [best_di]
-    mov ax, 0x4f02
-    mov bx, word [es:di]
-    int 0x10
+	je .no_mode
 
 	mov ax, 0x4f01
+	mov di, word [best_di]
     mov cx, word [es:di]
 
 	push es
@@ -78,7 +74,38 @@ vesa_setup:
 
 	pop es
 
+    mov ax, 0x4f02
+	mov di, word [best_di]
+    mov bx, word [es:di]
+    int 0x10
+
     ret
+
+.no_vesa:
+	mov si, errors.no_vesa
+	jmp panic
+
+.no_mode:
+	mov si, errors.no_mode
+	jmp panic
+
+.debug:
+	mov si, word [vbe_mode_info.width]
+	call print_hex
+	call print_spc
+	mov si, word [vbe_mode_info.height]
+    call print_hex
+    call print_spc
+	mov si, word [vbe_mode_info.bpp]
+	and si, 0xff
+	call print_hex
+	call print_spc
+	mov si, word [vbe_mode_info.framebuffer+2]
+    call print_hex
+	mov si, word [vbe_mode_info.framebuffer]
+    call print_hex
+    call print_nl
+	ret
 
 vbe_mode_info:
 times 16 db 0

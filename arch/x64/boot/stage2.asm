@@ -17,17 +17,24 @@ entry:
 .retry:	int 0x13
 	jc .retry
 
+;	push es
+;	push 0x2000
+;	pop es
+;	xor di, di
+;	call e820_setup
+;	pop es
+
+;	jc .no_e820
+
+;	mov word [handover.mem_count], bp
+
 	call vesa_setup
 
-	push es
-	push 0x2000
-	pop es
-	xor di, di
-	call e820_setup
-    jc $
-	pop es
+	jmp jump
 
-	mov word [handover.mem_count], bp
+.no_e820:
+	mov si, errors.no_e820
+	jmp panic
 
 jump:
 	in al, 0x92			; enable A20 line
@@ -146,5 +153,6 @@ handover:
 .mem_count:
 		dw 0
 
+%include "panic.asm"
 %include "vesa.asm"
 %include "memmap.asm"
