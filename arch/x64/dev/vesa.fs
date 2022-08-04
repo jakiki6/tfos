@@ -17,9 +17,20 @@ val fb-info-addr
   fb-vesa-info 25 + c@ debug-int
 ;
 
-: fb-draw-one ( r g b x y -- )
-  fb-info-pitch * swap fb-info-bpp * + fb-info-addr + 2 +
+: _fb-addr ( x y -- addr )
+  fb-info-pitch * swap fb-info-bpp * + fb-info-addr +
+;
+
+: fb-put ( r g b x y -- )
+  _fb-addr 2 +
   dup rot> c! 1-
   dup rot> c! 1-
   c!
+;
+
+: fb-get ( x y -- r g b )
+  _fb-addr
+  dup c@ swap 1+
+  dup c@ swap 1+
+  c@
 ;

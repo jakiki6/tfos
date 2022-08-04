@@ -39,13 +39,16 @@ until ;
 
 LIT" booting tfos..." print $0a serial-out
 
+val x
+val y
+
 begin
-  rng $ff and
-  rng $ff and
-  rng $ff and
-  rng fb-info-width %
-  rng fb-info-height %
-  fb-draw-one
+  x y fb-get
+  1+ rot> 1+ rot> 1+ rot>
+  x y fb-put
+
+  x rng-pm1 + fb-info-width % to x
+  y rng-pm1 + fb-info-height % to y
 again
 
 arch-hlt
