@@ -120,6 +120,15 @@ def hyphen_word(buf, binary, imm, dict, links, back):
         back.compile_num(binary, 0, force_big=True)
 imms["'"] = hyphen_word
 
+def valhyphen_word(buf, binary, imm, dict, links, back):
+    name = word(buf)  
+    if name in dict:
+        back.compile_num(binary, dict[name] + 2)
+    else:
+        links[binary.tell()] = (name, "num")
+        back.compile_num(binary, 2, force_big=True)
+imms["v'"] = valhyphen_word
+
 def str_lit(buf, binary, imm, dict, links, back):
     content = ""
     escape = False
@@ -153,6 +162,23 @@ def str_lit(buf, binary, imm, dict, links, back):
     binary.write(content)
     back.compile_num(binary, addr)
 imms["LIT\""] = str_lit
+
+def blob_word(buf, binary, imm, dict, links, back):
+    name = word(buf)
+    content = bytes.fromhex(word(buf))
+
+    dict[name] = binary.tell()
+
+    if len(content) < 128:
+        binary.write(b("EB"))
+        binary.write(len(content).to_bytes(1, "little"))
+    else:
+        binary.write(b("E9"))
+        binary.write(len(content).to_bytes(4, "little"))
+    addr = binary.tell()
+    binary.write(content)
+    back.compile_num(binary, addr)
+imms["blob"] = blob_word
 
 def cookie_push_word(buf, binary, imm, dict, links, back):
     binary.write(b("48B8"))

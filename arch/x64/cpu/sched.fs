@@ -1,7 +1,9 @@
+val cpu-sched-ticks
+
 : cpu-sched-init
   $80
   $1000 mem-alloc
-  ' cpu-sched-handler swap dup $ff8 + arch-int-timer
+  ' cpu-sched-handler swap dup $ff8 + v' cpu-sched-ticks arch-int-timer
   1 cpu-idt-register ;
 
 : cpu-sched-handler sched-handler ;
@@ -18,4 +20,9 @@
     48 - ( skip rdi, rsi, rdx, rcx, rbx and rax )
     over over ! ( rbp )
     swap drop ( rs )
+;
+
+: cpu-sched-wait
+  cpu-sched-ticks
+  begin arch-pause dup != cpu-sched-ticks until
 ;

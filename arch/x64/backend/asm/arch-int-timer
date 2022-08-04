@@ -1,15 +1,17 @@
 	bits 64
 	inc r15
 
-init:	; ( handler rbp rsp -- )
+init:	; ( handler rbp rsp ticks -- )
 	mov rax, qword [rbp-8]
-	mov qword [rel handler_rsp], rax
+	mov qword [rel ticks_addr], rax
 	mov rax, qword [rbp-16]
-    mov qword [rel handler_rbp], rax
+	mov qword [rel handler_rsp], rax
 	mov rax, qword [rbp-24]
+    mov qword [rel handler_rbp], rax
+	mov rax, qword [rbp-32]
     mov qword [rel handler], rax
 
-	sub rbp, 16
+	sub rbp, 24
 	call .l
 .l:	pop rax
 	add rax, (irq_handler - .l)
@@ -17,6 +19,7 @@ init:	; ( handler rbp rsp -- )
 	ret
 
 irq_handler:
+	cli
 	push rax
 	push rbx
 	push rcx
@@ -25,6 +28,9 @@ irq_handler:
 	push rdi
 	push rbp
 	mov rax, rsp
+
+	mov rbx, qword [rel ticks_addr]
+	inc qword [rbx]
 
 	mov rbp, qword [rel handler_rbp]
 	mov qword [rbp], rsp
@@ -53,6 +59,7 @@ irq_handler:
 	out 0x20, al
 	pop rax
 
+	sti
 	iretq
 
 handler:
@@ -62,4 +69,7 @@ handler_rbp:
 	dq 0
 
 handler_rsp:
+	dq 0
+
+ticks_addr:
 	dq 0

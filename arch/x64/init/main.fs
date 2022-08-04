@@ -39,16 +39,11 @@ until ;
 
 LIT" booting tfos..." print $0a serial-out
 
-val x
-val y
+val init-wake
+val init-wake-addr
 
+( the init can't die or we're screwed )
 begin
-  x y fb-get
-  1+ rot> 1+ rot> 1+ rot>
-  x y fb-put
-
-  x rng-pm1 + fb-info-width % to x
-  y rng-pm1 + fb-info-height % to y
+  1 v' init-wake sched-waitfor
+  init-wake-addr execute
 again
-
-arch-hlt
