@@ -12,9 +12,6 @@ val fb-info-addr
   fb-vesa-info 20 + w@ to fb-info-height
   fb-vesa-info 25 + c@ 7 + 3 >> to fb-info-bpp
   fb-vesa-info 40 + @ to fb-info-addr
-
-  fb-info-bpp debug-int
-  fb-vesa-info 25 + c@ debug-int
 ;
 
 : _fb-addr ( x y -- addr )
