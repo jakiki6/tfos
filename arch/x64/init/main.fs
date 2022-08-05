@@ -38,6 +38,10 @@ until ;
 
 LIT" booting tfos..." print $0a serial-out
 
+begin
+  rng-int $7f and tty-write-one
+again
+
 val init-wake
 val init-wake-addr
 

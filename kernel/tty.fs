@@ -12,9 +12,9 @@ val tty-cols
 ;
 
 : tty-write-one ( c -- )
-(  dup $0a = if
+  dup $0a = if
     0 to tty-x
-    tty-y 1 + tty-rows % to tty-y
+    tty-y font-sy + fb-info-height % to tty-y
     drop exit
   then
 
@@ -24,15 +24,15 @@ val tty-cols
   then
 
   dup $09 = if
-    tty-x 7 + 8 / 8 * tty-cols % to tty-x
+    tty-x font-sx 1- + font-sx / font-sx * fb-info-height % to tty-x
     drop exit
-  then )
+  then
 
-  tty-x font-sx * tty-y font-sy * font-render
-  tty-x 1+ to tty-x
+  tty-x tty-y font-render
+  tty-x font-sx + to tty-x
 
-  ( tty-x tty-cols < not if
+  tty-x font-sx + fb-info-width > if
     0 to tty-x
-    tty-y 1 + tty-rows % to tty-y
-  then )
+    tty-y font-sy + fb-info-height % to tty-y
+  then
 ;
