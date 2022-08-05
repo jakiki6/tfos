@@ -1,0 +1,4 @@
+bits 64
+sub rbp, 8
+mov rsi, qword [rbp]
+ret

@@ -11,6 +11,7 @@ def define_word(buf, binary, imm, dict, links, back):
     binary.write(b("00000000"))
     dict[word(buf)] = binary.tell()
 imms[":"] = define_word
+imms["fn"] = define_word
 
 def end_word(buf, binary, imm, dict, links, back):
     binary.write(b("C3"))
@@ -21,6 +22,21 @@ def end_word(buf, binary, imm, dict, links, back):
     binary.write(rel.to_bytes(4, "little", signed=True))
     binary.seek(p)
 imms[";"] = end_word
+
+def scope_begin(buf, binary, imm, dict, links, back):
+    back.compile_ref(binary, dict["b["])
+imms["{"] = scope_begin
+
+def scope_end(buf, binary, imm, dict, links, back):
+    back.compile_ref(binary, dict["]b"])
+    binary.write(b("C3"))
+    target = stack.pop()
+    rel = binary.tell() - target - 4
+    p = binary.tell()
+    binary.seek(target)
+    binary.write(rel.to_bytes(4, "little", signed=True))
+    binary.seek(p)
+imms["}"] = scope_end
 
 def cond_clause(buf, binary, imm, dict, links, back):
     binary.write(b("4883ED0848837D00000F84"))
@@ -164,10 +180,7 @@ def str_lit(buf, binary, imm, dict, links, back):
 imms["LIT\""] = str_lit
 
 def blob_word(buf, binary, imm, dict, links, back):
-    name = word(buf)
     content = bytes.fromhex(word(buf))
-
-    dict[name] = binary.tell()
 
     if len(content) < 128:
         binary.write(b("EB"))

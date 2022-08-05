@@ -1,7 +1,7 @@
 bits 64
 mov rax, qword [rbp-8]
-inc rax
 shl rax, 3
-sub rax, rbp
+neg rax
+add rax, rsi
 mov qword [rbp-8], rax
 ret

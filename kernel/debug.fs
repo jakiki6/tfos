@@ -31,3 +31,10 @@
   over over = until
   drop drop
 ;
+
+: debug-stack ( -- )
+  8 do
+    debug-int
+  loop
+  begin again
+;

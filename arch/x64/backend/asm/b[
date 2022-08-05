@@ -1,0 +1,6 @@
+bits 64
+mov qword [rbp], rsi
+mov rsi, rbp
+sub rsi, 8
+add rbp, 8
+ret

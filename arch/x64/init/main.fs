@@ -39,6 +39,8 @@ until ;
 
 LIT" booting tfos..." print $0a serial-out
 
+$42 10 10 font-render
+
 val init-wake
 val init-wake-addr
 

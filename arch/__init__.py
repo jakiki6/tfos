@@ -7,8 +7,13 @@ def init(binary, imm, dict):
     apply(imm)
 
 def comment(buf, binary, imm, dict, links, back):
-    while word(buf) != ")":
-        continue
+    level = 1
+    while level:
+        w = word(buf)
+        if w == "(":
+            level += 1
+        elif w == ")":
+            level -= 1
 imms["("] = comment
 
 def include(buf, binary, imm, dict, links, back):

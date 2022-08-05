@@ -1,8 +1,10 @@
 bits 64
+push rsi
 mov rsi, qword [rbp - 24]
 mov rdi, qword [rbp - 16]
 mov rcx, qword [rbp - 8]
 cld
 rep movsb
 sub rbp, 24
+pop rsi
 ret
