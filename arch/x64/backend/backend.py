@@ -4,7 +4,7 @@ from . import immeds
 @register
 class X64Backend(Backend):
     name = "x64"
-    base = 0x10000
+    base = 0x130000
     strings = get_strings(name)
 
     def init(self, binary, imm, dict):

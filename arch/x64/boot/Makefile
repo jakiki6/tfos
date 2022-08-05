@@ -1,7 +1,7 @@
 all: ../os.img
 
 ../os.img: loader.bin
-	fallocate --length 64K $@
+	dd if=/dev/urandom of=$@ bs=65536 count=1
 
 	dd if=loader.bin of=$@ conv=notrunc bs=512 count=4
 
