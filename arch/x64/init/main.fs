@@ -32,15 +32,11 @@ fb-init
 
 cpu-irq-enable
 
-: print begin
-  dup c@ dup serial-out tty-write-one 1+ dup c@ not
-until ;
+LIT" booting tfos..." tty-buf buf-print
 
-LIT" booting tfos..." print $0a serial-out
-
-begin
+( begin
   rng-int $7f and tty-write-one
-again
+again )
 
 val init-wake
 val init-wake-addr
