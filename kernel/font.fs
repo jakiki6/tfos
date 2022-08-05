@@ -15,6 +15,8 @@ fn font-render ( c x y -- ) {
       fb-put
     loop
   loop
+
+  3 leave
 }
 
 val font-blob

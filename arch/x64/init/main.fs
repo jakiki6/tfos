@@ -29,17 +29,14 @@ dev-pic-init
 serial-init
 
 fb-init
-( 255 255 255 69 69 fb-draw-one )
 
 cpu-irq-enable
 
 : print begin
-  dup c@ serial-out 1+ dup c@ not
+  dup c@ dup serial-out tty-write-one 1+ dup c@ not
 until ;
 
 LIT" booting tfos..." print $0a serial-out
-
-$42 10 10 font-render
 
 val init-wake
 val init-wake-addr

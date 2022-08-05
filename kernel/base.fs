@@ -5,7 +5,9 @@ include kernel/debug.fs
 include kernel/consts.fs
 include kernel/rng.fs
 include kernel/font.fs
+include kernel/tty.fs
 
 : base-init
   rng-init
+  tty-init
 ;
