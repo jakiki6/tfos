@@ -13,37 +13,10 @@ entry:
 	push cs
 	pop es
 
-unreal:
-	lgdt [unreal_gdt.desc]
+	in al, 0x92			; enable A20 line
+	or al, 0x02
+	out 0x92, al
 
-	mov eax, cr0
-	or al, 1
-	mov cr0, eax
-
-	jmp 0x08:.pmode
-.pmode:
-	bits 32
-	mov ebx, 0x10
-	mov ds, bx
-	mov es, bx
-	mov ss, bx
-	mov fs, bx
-	mov gs, bx
-
-	and al, 0xfe
-	mov cr0, eax
-
-	xor ax, ax
-	mov ds, ax
-	mov es, ax
-	mov ss, ax
-	mov fs, ax
-	mov gs, ax
-
-	jmp 0x0000:load
-
-	bits 16
-	
 load:
 	clc
 	mov ah, 0x42
@@ -53,21 +26,16 @@ load:
 
 	mov esi, 0x10000
 	mov edi, dword [save_edi]
+	mov ecx, 0x8000
 
-	cmp edi, 0x200000
+	cmp edi, 0x150000
 	je .end
 
-.loop:
-	mov al, byte [esi]
-	mov byte [edi], al
-	inc esi
-	inc edi
-	cmp esi, 0x10200
-	jne .loop
+	call pmode
 
 	mov dword [save_edi], edi
 
-	inc dword [DAP.lba_lower]
+	add dword [DAP.lba_lower], 0x40
 	jnc load
 	inc dword [DAP.lba_upper]
 	jmp load
@@ -88,10 +56,6 @@ load:
 	call vesa_setup
 
 jump:
-	in al, 0x92			; enable A20 line
-	or al, 0x02
-	out 0x92, al
-
 	mov di, PAGING_BUFFER
 
 	push di
@@ -177,13 +141,55 @@ long_mode:
 
 	bits 16
  
-unreal_gdt:
+pmode:
+	cli
+	push ds
+	push es
+
+	lgdt [pmode_gdt.desc]
+
+	mov eax, cr0
+	or al, 1
+	mov cr0, eax
+
+	jmp 0x08:.pmode
+.pmode:
+	bits 32
+	mov eax, 0x10
+	mov ds, ax
+	mov es, ax
+
+	cld
+	rep movsb
+
+	jmp 0x18:.ptr
+.ptr:
+	bits 16
+	mov ax, 0x20
+	mov ds, ax
+	mov es, ax
+
+	mov eax, cr0
+	and al, 0xfe
+	mov cr0, eax
+
+	jmp 0x00:.rmode
+.rmode:
+	pop es
+	pop ds
+	ret
+
+	bits 16
+
+pmode_gdt:
 .null:  dq 0x0000000000000000
-.code:	dq 0x008F9A000000FFFF
-.data:	dq 0x00CF92000000FFFF
+.pcode:	dq 0x00cf9a000000ffff
+.pdata:	dq 0x00cf93000000ffff
+.rcode:	dq 0x00009a000000ffff
+.rdata:	dq 0x000093000000ffff
 .desc:
-    dw unreal_gdt.desc - unreal_gdt - 1
-    dq unreal_gdt
+    dw pmode_gdt.desc - pmode_gdt - 1
+    dq pmode_gdt
 
 DAP:
 .header:
@@ -191,7 +197,7 @@ DAP:
 .unused:
     db 0x00     ; unused
 .count:  
-    dw 0x001    ; number of sectors
+    dw 0x0040   ; number of sectors
 .offset_offset:   
     dw 0x0000   ; offset
 .offset_segment:  
