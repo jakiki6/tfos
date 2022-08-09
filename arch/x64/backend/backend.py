@@ -10,10 +10,9 @@ class X64Backend(Backend):
     def init(self, binary, imm, dict):
         binary.base = self.base
 
-        # stable abi
-        binary.write(b("90909090909048B8"))
+        binary.write(b("48B8"))
         binary.write(b("0000000000000000"))
-        binary.write(b("FFE0000000000000"))
+        binary.write(b("FFE0"))
 
         for k, v in self.strings.items():
             dict[k] = binary.tell()
@@ -22,7 +21,7 @@ class X64Backend(Backend):
         immeds.apply(imm)
 
         p = binary.tell()
-        binary.seek(8, 4)
+        binary.seek(2, 4)
         binary.write(p.to_bytes(8, "little"))
         binary.seek(p)
 

@@ -7,7 +7,6 @@ include kernel/rng.fs
 include kernel/font.fs
 include kernel/tty.fs
 include kernel/str.fs
-include kernel/logo.fs
 include kernel/utils.fs
 
 : base-init

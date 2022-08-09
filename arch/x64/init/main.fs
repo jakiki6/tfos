@@ -29,7 +29,6 @@ dev-pic-init
 serial-init
 
 fb-init
-logo-print
 
 cpu-irq-enable
 
