@@ -1,6 +1,8 @@
 bits 64
 mov rax, qword [rbp-8]
+mov rbx, qword [rbp-16]
 sub rbp, 8
 shl rax, 3
 sub rbp, rax
+mov qword [rbp-8], rbx
 ret

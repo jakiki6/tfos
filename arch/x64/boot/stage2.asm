@@ -28,7 +28,7 @@ load:
 	mov edi, dword [save_edi]
 	mov ecx, 0x8000
 
-	cmp edi, 0x150000
+	cmp edi, 0x200000
 	je .end
 
 	call pmode
