@@ -1,7 +1,7 @@
 : debug-hex-one ( i -- )
   dup
-    4 >> $0f and consts-hextable + c@ serial-out
-    $0f and consts-hextable + c@ serial-out
+    4 >> $0f and consts-hextable + c@ dev-serial-out
+    $0f and consts-hextable + c@ dev-serial-out
 ;
 
 : debug-int# ( i -- )
@@ -14,11 +14,11 @@
 
 : debug-int ( i -- )
   debug-int#
-  $0a serial-out
+  $0a dev-serial-out
 ;
 
 : debug-dump ( addr -- )
-  $0a serial-out
+  $0a dev-serial-out
 
   dup 256 + swap
   begin
@@ -26,7 +26,7 @@
       c@ debug-hex-one
     1+
     over over - 7 and 0 = if
-      $0a serial-out
+      $0a dev-serial-out
     then
   over over = until
   drop drop

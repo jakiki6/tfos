@@ -32,7 +32,7 @@ DAP:
 .unused:
     db 0x00     ; unused
 .count:  
-    dw 0x003   ; number of sectors
+    dw 0x0007   ; number of sectors
 .offset_offset:
     dw 0x2000   ; offset
 .offset_segment:

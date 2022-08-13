@@ -3,7 +3,7 @@ all: ../os.img
 ../os.img: loader.bin
 	dd if=/dev/urandom of=$@ bs=1M count=4
 
-	dd if=loader.bin of=$@ conv=notrunc bs=512 count=4
+	dd if=loader.bin of=$@ conv=notrunc bs=512 count=8
 
 loader.bin: bootsec.bin stage2.bin
 	cat $^ > $@

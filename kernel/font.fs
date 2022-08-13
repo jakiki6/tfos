@@ -1,4 +1,6 @@
 fn font-render ( c x y -- ) {
+  2 # @ $7f > if $3f 2 # ! then
+
   2 # @ 3 << font-blob + 2 # !
 
   font-sx do

@@ -18,3 +18,11 @@
 : buf-print ( str buf -- )
   swap dup str-len rot< buf-write
 ;
+
+: buf-read1 ( buf -- )
+  0 1 rot< srel 32 - rot> buf-read drop
+;
+
+: buf-write1 ( c buf -- )
+  1 swap srel 24 - rot> buf-write drop drop
+;

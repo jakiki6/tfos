@@ -15,3 +15,23 @@
     3 leave
   ]b
 ;
+
+: utils-printh1 ( n buf -- )
+  over 4 >> consts-hextable + c@ over buf-write1
+  over $0f and consts-hextable + c@ over buf-write1
+
+  drop drop
+;
+
+: utils-printh ( n buf -- )
+  8 >r begin
+    over 56 >> over utils-printh1
+    swap 8 << swap
+  next
+
+  drop drop
+;
+
+: utils-printc ( c buf -- )
+	buf-write1
+;

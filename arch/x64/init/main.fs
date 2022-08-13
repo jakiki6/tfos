@@ -13,7 +13,11 @@ include arch/x64/dev/pic.fs
 include arch/x64/dev/serial.fs
 include arch/x64/dev/vesa.fs
 
+( early debugging )
+dev-serial-init
+
 cpu-mem-init
+
 cpu-paging-init
 
 cpu-gdt-init
@@ -26,17 +30,20 @@ sched-init
 
 dev-pit-init
 dev-pic-init
-serial-init
 
 fb-init
 
 cpu-irq-enable
 
-LIT" booting tfos..." tty-buf buf-print
+LIT" booting tfos...\n" tty-buf buf-print
 
-( begin
-  rng-int $7f and tty-write-one
-again )
+LIT" memory map:\n" tty-buf buf-print
+cpu-mem-e820-count >r begin
+  cpu-mem-e820-count r@ - 24 * cpu-mem-e820-head +
+    dup @ tty-buf utils-printh $20 tty-buf utils-printc 8 +
+    dup @ tty-buf utils-printh $20 tty-buf utils-printc 8 +
+    d@ tty-buf utils-printh $0a tty-buf utils-printc
+next
 
 val init-wake
 val init-wake-addr

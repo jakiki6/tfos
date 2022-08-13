@@ -163,8 +163,11 @@ def str_lit(buf, binary, imm, dict, links, back):
                 content += "\n"
             elif c == "t":
                 content += "\t"
+
+            escape = False
         else:
             content += c
+            escape = False
 
     content = content.encode("utf-8") + b"\x00"
 

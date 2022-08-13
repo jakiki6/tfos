@@ -41,16 +41,19 @@ load:
 	jmp load
 .end:
 
-;	push es
-;	push 0x2000
-;	pop es
-;	xor di, di
-;	call e820_setup
-;	pop es
+	push es
+	push 0x2000
+	pop es
+	xor di, di
+	call e820_setup
+	pop es
 
-;	jc .no_e820
+	jnc .continue
+	mov si, errors.no_e820
+	jmp panic
 
-;	mov word [handover.mem_count], bp
+.continue:
+	mov word [handover.mem_count], bp
 
 	clc
 	call vesa_setup
@@ -203,9 +206,9 @@ DAP:
 .offset_segment:  
     dw 0x1000   ; offset
 .lba_lower:
-    dd 4	; lba
+    dd 8		; lba
 .lba_upper:
-    dd 0	; lba
+    dd 0		; lba
 .end:
 
 idt:
