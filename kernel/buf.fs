@@ -1,17 +1,17 @@
 (
   structure:
-    read ( dest count -- read )
-    write ( src count -- written )
-    tell ( -- offset )
-    seek ( offset -- )
-    truncate ( len -- )
+    read ( dest count buf -- read )
+    write ( src count buf -- written )
+    tell ( buf -- offset )
+    seek ( offset buf -- )
+    truncate ( len buf -- )
 )
 
-: buf-read @ execute ;
-: buf-write 8 + @ execute ;
-: buf-tell 16 + @ execute ;
-: buf-seek 24 + @ execute ;
-: buf-truncate 32 + @ execute ;
+: buf-read dup @ execute ;
+: buf-write 8 + dup @ execute ;
+: buf-tell 16 + dup @ execute ;
+: buf-seek 24 + dup @ execute ;
+: buf-truncate 32 + dup @ execute ;
 
 : buf-seek-rel dup buf-tell + buf-seek ;
 

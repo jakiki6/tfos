@@ -47,28 +47,30 @@ val tty-buf
   then
 ;
 
-: tty-buf-read ( dest count -- read )
-  drop drop 0
+: tty-buf-read ( dest count buf -- read )
+  drop drop drop 0
 ;
 
-: tty-buf-write ( src count -- written )
-  swap
+: tty-buf-write ( src count buf -- written )
+  drop swap
   over do
     dup c@ tty-write-one
     1+
   loop drop
 ;
 
-: tty-buf-tell ( -- offset )
+: tty-buf-tell ( buf -- offset )
+  drop
   tty-y tty-cols * tty-x +
 ;
 
-: tty-buf-seek ( offset -- )
+: tty-buf-seek ( offset buf -- )
+  drop
   tty-cols /%
     to tty-x
     to tty-y
 ;
 
-: tty-buf-truncate ( len -- )
-  drop
+: tty-buf-truncate ( len buf -- )
+  drop drop
 ;
