@@ -1,3 +1,11 @@
+: min ( a b -- c )
+  over over > if swap then drop
+;
+
+: max ( a b -- c )
+  over over < if swap then drop 
+;
+
 : utils-printn ( n buf -- )
   ( I know recursion is bad but the maximal recursion depth you can get is 20 )
 

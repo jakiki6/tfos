@@ -1,0 +1,10 @@
+bits 64
+xor rbx, rbx
+mov rax, qword [rbp-16]
+cmp rax, qword [rbp-8]
+jbe .skip
+inc ebx
+.skip:
+sub rbp, 8
+mov qword [rbp-8], rbx
+ret
