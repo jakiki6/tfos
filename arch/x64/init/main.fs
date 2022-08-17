@@ -17,7 +17,6 @@ include arch/x64/dev/vesa.fs
 dev-serial-init
 
 cpu-mem-init
-mem-init
 
 cpu-paging-init
 

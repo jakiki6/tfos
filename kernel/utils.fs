@@ -6,6 +6,14 @@
   over over < if swap then drop 
 ;
 
+: 2dup ( a b -- a b a b )
+  over over
+;
+
+: 2drop ( a b -- )
+  drop drop
+;
+
 : utils-printn ( n buf -- )
   ( I know recursion is bad but the maximal recursion depth you can get is 20 )
 

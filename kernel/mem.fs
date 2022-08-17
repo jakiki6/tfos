@@ -5,8 +5,8 @@ val mem-mm-ptr
 val mem-mm-highest
 val mem-mm-last
 
-: mem-init ;
-: mem-alloc mem-ptr swap over + to mem-ptr ;
+( : mem-alloc mem-ptr swap over + to mem-ptr ; )
+: mem-alloc $fff + 12 >> mem-mm-alloc ;
 : mem-free drop ;
 
 : mem-mm-alloc ( pages -- addr ) 
