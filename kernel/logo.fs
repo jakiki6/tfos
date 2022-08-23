@@ -6,8 +6,8 @@
       logo-sx do
         j logo-sx * i + 3 * logo-blob +
         dup c@ swap 1+ dup c@ swap 1+ c@
-        i 1 # @ +
-        j 0 # @ +
+        i 2 # @ +
+        j 1 # @ +
         fb-put
       loop
     loop
