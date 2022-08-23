@@ -67,8 +67,6 @@ val cpu-mem-e820-tmp
 
   ( protect kernel )
   mem-mm-ptr $20 + $20 mem-wipe
-
-  1 mem-alloc debug-int arch-hlt
 ;
 
 : cpu-mem-dump

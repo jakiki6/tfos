@@ -37,6 +37,8 @@ val mem-mm-last
     -1 # @
     1 # @ - ( get start )
 
+    dup 12 << debug-int
+
     ( clear bits )
     1 # @ do
       dup i + dup dup

@@ -1,19 +1,19 @@
 fn font-render ( c x y -- ) {
-  2 # @ $7f > if $3f 2 # ! then
+  3 # @ $7f > if $3f 3 # ! then
 
-  2 # @ 3 << font-blob + 2 # !
+  3 # @ 3 << font-blob + 3 # !
 
   font-sx do
     font-sy do
-      2 # @ i + @ 1 j << and
+      3 # @ i + @ 1 j << and
       if
         255 255 255
       else
         0 0 0
       then
 
-      1 # @ j +
-      0 # @ i +
+      2 # @ j +
+      1 # @ i +
       fb-put
     loop
   loop
