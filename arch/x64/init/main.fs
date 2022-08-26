@@ -33,7 +33,7 @@ dev-pic-init
 
 fb-init
 
-( cpu-irq-enable )
+cpu-irq-enable
 
 LIT" booting tfos...\n" tty-buf buf-print
 
@@ -44,8 +44,6 @@ cpu-mem-e820-count >r begin
     dup @ tty-buf utils-printh $20 tty-buf utils-printc 8 +
     d@ tty-buf utils-printh $0a tty-buf utils-printc
 next
-
-begin again
 
 val init-wake
 val init-wake-addr

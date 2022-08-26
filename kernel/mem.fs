@@ -1,11 +1,7 @@
-val mem-ptr
-$200000 to mem-ptr
-
 val mem-mm-ptr
 val mem-mm-highest
 val mem-mm-last
 
-( : mem-alloc mem-ptr swap over + to mem-ptr ; )
 : mem-alloc $fff + 12 >> mem-mm-alloc ;
 : mem-free drop ;
 : mem-mm-alloc ( pages -- addr ) 
@@ -37,8 +33,6 @@ val mem-mm-last
     -1 # @
     1 # @ - ( get start )
 
-    dup 12 << debug-int
-
     ( clear bits )
     1 # @ do
       dup i + dup dup
@@ -50,6 +44,6 @@ val mem-mm-last
     swap
   ]b
 
-  swap drop
+  swap drop swap drop swap drop swap drop
   12 <<
 ;
