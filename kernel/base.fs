@@ -8,6 +8,7 @@ include kernel/font.fs
 include kernel/tty.fs
 include kernel/str.fs
 include kernel/utils.fs
+include kernel/panic.fs
 
 : base-init
   rng-init

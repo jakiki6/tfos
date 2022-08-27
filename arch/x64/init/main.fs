@@ -8,6 +8,7 @@ include arch/x64/cpu/idt.fs
 include arch/x64/cpu/sched.fs
 include arch/x64/cpu/mem.fs
 include arch/x64/cpu/paging.fs
+include arch/x64/sys/acpi.fs
 include arch/x64/dev/pit.fs
 include arch/x64/dev/pic.fs
 include arch/x64/dev/serial.fs
@@ -45,6 +46,10 @@ cpu-mem-e820-count >r begin
     dup @ tty-buf utils-printh $20 tty-buf utils-printc 8 +
     d@ tty-buf utils-printh $0a tty-buf utils-printc
 next
+
+acpi-init
+LIT" [*] acpi rsdp table: " tty-buf buf-print acpi-rsdp tty-buf utils-printh
+$0a tty-buf utils-printc
 
 val init-wake
 val init-wake-addr
