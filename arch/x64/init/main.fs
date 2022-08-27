@@ -1,7 +1,7 @@
 val boot-handover
 to boot-handover
 
-include kernel/base.fs
+include sys/base.fs
 
 include arch/x64/cpu/gdt.fs
 include arch/x64/cpu/idt.fs
