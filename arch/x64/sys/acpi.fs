@@ -14,4 +14,11 @@ val acpi-rsdp
 
 : acpi-init
   acpi-find-rsdp
+
+  LIT" [*] acpi rsdp table: " klog acpi-rsdp klog-buf utils-printh
+  $0a klog-c
+
+  LIT" [*] acpi oem: " klog
+  acpi-rsdp 9 + 6 klog-w
+  $0a klog-c
 ;

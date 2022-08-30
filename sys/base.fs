@@ -8,6 +8,7 @@ include sys/rng.fs
 include sys/font.fs
 include sys/tty.fs
 include sys/panic.fs
+include sys/log.fs
 
 : base-init
   rng-init

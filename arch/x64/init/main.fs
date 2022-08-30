@@ -36,20 +36,18 @@ fb-init
 
 cpu-irq-enable
 
-LIT" [*] booting tfos...\n" tty-buf buf-print
+LIT" [*] booting tfos...\n" klog
 
-LIT" [*] memory map:\n" tty-buf buf-print
+LIT" [*] memory map:\n" klog
 cpu-mem-e820-count >r begin
   cpu-mem-e820-count r@ - 24 * cpu-mem-e820-head +
     $20 tty-buf 2dup utils-printc utils-printc
-    dup @ tty-buf utils-printh $20 tty-buf utils-printc 8 +
-    dup @ tty-buf utils-printh $20 tty-buf utils-printc 8 +
-    d@ tty-buf utils-printh $0a tty-buf utils-printc
+    dup @ klog-buf utils-printh $20 klog-c 8 +
+    dup @ klog-buf utils-printh $20 klog-c 8 +
+    d@ klog-buf utils-printh $0a klog-c
 next
 
 acpi-init
-LIT" [*] acpi rsdp table: " tty-buf buf-print acpi-rsdp tty-buf utils-printh
-$0a tty-buf utils-printc
 
 val init-wake
 val init-wake-addr
