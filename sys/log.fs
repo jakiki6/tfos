@@ -6,6 +6,10 @@
   tty-buf buf-write1
 ;
 
+: klog-nl
+  $0a klog-c
+;
+
 : klog-w
   tty-buf buf-write drop
 ;

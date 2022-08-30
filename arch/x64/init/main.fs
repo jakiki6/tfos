@@ -44,7 +44,7 @@ cpu-mem-e820-count >r begin
     $20 tty-buf 2dup utils-printc utils-printc
     dup @ klog-buf utils-printh $20 klog-c 8 +
     dup @ klog-buf utils-printh $20 klog-c 8 +
-    d@ klog-buf utils-printh $0a klog-c
+    d@ klog-buf utils-printh klog-nl
 next
 
 acpi-init
