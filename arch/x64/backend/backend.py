@@ -1,4 +1,4 @@
-import io
+import io, time
 
 from backends import *
 from . import immeds
@@ -6,13 +6,14 @@ from . import immeds
 @register
 class X64Backend(Backend):
     name = "x64"
-    base = 0x8000000
+    base = 0x200000
     strings = get_strings(name)
 
     def init(self, binary, imm, dict):
         binary.base = self.base
 
         binary.write(self.strings["_start"])
+        to_patch = binary.tell()
 
         for k, v in self.strings.items():
             if k.startswith("_"):
@@ -20,6 +21,11 @@ class X64Backend(Backend):
 
             dict[k] = binary.tell()
             binary.write(v)
+
+        p = binary.tell()
+        binary.seek(to_patch - 4)
+        binary.write(i(p - to_patch, 4))
+        binary.seek(p)
 
         immeds.apply(imm)
 
@@ -74,7 +80,8 @@ class X64Backend(Backend):
         binary.write(b"PE\x00\x00")     # signature
         binary.write(b("6486"))         # type
         binary.write(i(1, 2))           # sections
-        binary.write(i(0x5cba52f6, 4))  # timestamp
+                                        # timestamp
+        binary.write(i(int(time.time()), 4))
         binary.write(i(0, 8))
         binary.write(i(240, 2))         # size of optional header
         binary.write(i(0x202e, 2))      # characteristics

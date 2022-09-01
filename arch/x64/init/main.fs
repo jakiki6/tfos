@@ -1,5 +1,7 @@
+to uefi-systable
+to uefi-handle
+
 val boot-handover
-to boot-handover
 
 include sys/base.fs
 
@@ -16,6 +18,11 @@ include arch/x64/dev/vesa.fs
 
 ( early debugging )
 dev-serial-init
+
+uefi-systable 24 + @
+LIT" hello" dev-serial-buf buf-print
+
+begin again
 
 cpu-mem-init
 

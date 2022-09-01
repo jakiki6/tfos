@@ -12,7 +12,7 @@ val tty-buf
   fb-info-height font-sy / to tty-rows
   fb-info-width font-sx / to tty-cols
 
-  40 mem-alloc
+  bss-alloc 40
     to tty-buf
     ' tty-buf-read tty-buf 0 + !
     ' tty-buf-write tty-buf 8 + !

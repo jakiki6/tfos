@@ -196,6 +196,20 @@ def blob_word(buf, binary, imm, dict, links, back):
     back.compile_num(binary, addr)
 imms["blob"] = blob_word
 
+def bss_alloc_word(buf, binary, imm, dict, links, back):
+    content = bytes(int(word(buf)))
+
+    if len(content) < 128:
+        binary.write(b("EB"))
+        binary.write(len(content).to_bytes(1, "little"))
+    else:
+        binary.write(b("E9"))
+        binary.write(len(content).to_bytes(4, "little"))
+    addr = binary.tell()
+    binary.write(content)
+    back.compile_num(binary, addr)
+imms["bss-alloc"] = bss_alloc_word
+
 def cookie_push_word(buf, binary, imm, dict, links, back):
     binary.write(b("48B8"))
     addr = binary.tell()

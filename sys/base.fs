@@ -9,6 +9,7 @@ include sys/font.fs
 include sys/tty.fs
 include sys/panic.fs
 include sys/log.fs
+include sys/uefi.fs
 
 : base-init
   rng-init

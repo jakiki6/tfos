@@ -26,6 +26,24 @@ def include(buf, binary, imm, dict, links, back):
         buf.seek(0)
 imms["include"] = include
 
+def struct(buf, binary, imm, dict, links, back):
+    name = word(buf)
+
+    assert word(buf) == "{"
+
+    offset = 0
+    while True:
+        field = word(buf)
+
+        if field == "}":
+            break
+
+        length = int(word(buf))
+
+        imm[f"{name}->{field}"] = lambda _buf, _binary, _imm, _dict, _links, _backend: _backend.compile_num(_binary, offset)
+        offset += length
+imms["struct"] = struct
+
 def apply(imm):
     for k, v in imms.items():
         imm[k] = v
