@@ -3,6 +3,7 @@ val tty-y
 val tty-rows
 val tty-cols
 
+val tty-avail
 val tty-buf
 
 : tty-init
@@ -19,6 +20,8 @@ val tty-buf
     ' tty-buf-tell tty-buf 16 + !
     ' tty-buf-seek tty-buf 24 + !
     ' tty-buf-truncate tty-buf 32 + !
+
+  1 to tty-avail
 ;
 
 : tty-write-one ( c -- )

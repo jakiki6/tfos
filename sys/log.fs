@@ -1,9 +1,9 @@
 : klog
-  tty-buf buf-print drop
+  dev-serial-buf buf-print drop
 ;
 
 : klog-c
-  tty-buf buf-write1
+  dev-serial-buf buf-write1
 ;
 
 : klog-nl
@@ -11,9 +11,9 @@
 ;
 
 : klog-w
-  tty-buf buf-write drop
+  dev-serial-buf buf-write drop
 ;
 
 : klog-buf
-  tty-buf
+  dev-serial-buf
 ;

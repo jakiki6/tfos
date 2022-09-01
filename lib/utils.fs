@@ -52,3 +52,12 @@
 : utils-printc ( c buf -- )
 	buf-write1
 ;
+
+: utils-print16 ( str buf -- )
+  swap dup str-len16 do
+    2dup c@ swap buf-write1
+    2 +
+  loop
+
+  2drop
+;
