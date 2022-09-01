@@ -1,6 +1,14 @@
 from .x64.backend import backend
 from backends import word
 
+class struct_field(object):
+    def __init__(self, offset):
+        self.offset = offset
+
+    def __call__(self, _buf, _binary, _imm, _dict, _links, _backend):
+        _backend.compile_num(_binary, self.offset)
+        _backend.compile_ref(_binary, _dict["+"])
+
 imms = {}
 
 def init(binary, imm, dict):
@@ -38,9 +46,13 @@ def struct(buf, binary, imm, dict, links, back):
         if field == "}":
             break
 
-        length = int(word(buf))
+        length = word(buf)
+        if length == "*":
+            length = 8
+        else:
+            length = int(length)
 
-        imm[f"{name}->{field}"] = lambda _buf, _binary, _imm, _dict, _links, _backend: _backend.compile_num(_binary, offset)
+        imm[f"{name}/{field}"] = struct_field(offset)
         offset += length
 imms["struct"] = struct
 
