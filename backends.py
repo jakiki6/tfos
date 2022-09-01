@@ -3,6 +3,9 @@ import sys, os
 def b(s):
     return bytes.fromhex(s.lower())
 
+def i(v, l):
+    return v.to_bytes(l, "little")
+
 def skip(buf):
     while True:
         c = buf.read(1)

@@ -105,4 +105,4 @@ def compile(content, backend=backends.backends["x64"]):
             print(k, hex(v))
 
     binary.reset()
-    return binary.read()
+    return backend.wrap(binary.read())

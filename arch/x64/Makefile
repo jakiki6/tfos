@@ -1,15 +1,13 @@
-all: kernel.bin
-	make -C boot
-	dd if=$< of=os.img bs=512 seek=8 conv=notrunc
-
-	qemu-system-x86_64 -hda os.img -m 512M -D log.txt -d cpu_reset,int -machine smm=off -serial stdio -no-reboot
+all: boot
+	qemu-system-x86_64 -hda os.img -m 512M -D log.txt -d cpu_reset,int -machine smm=off -serial stdio -no-reboot -bios /usr/share/ovmf/OVMF.fd --enable-kvm
 
 clean:
-	make -C boot clean
+	rm os.img log.txt kernel.efi 2> /dev/null || true
 
-	rm os.img log.txt kernel.bin 2> /dev/null || true
+boot: kernel.efi
+	make -C boot
 
-kernel.bin:
+kernel.efi:
 	python3 ../../main.py arch/x64/init/main.fs $@
 
-.PHONY: all clean
+.PHONY: all clean boot
