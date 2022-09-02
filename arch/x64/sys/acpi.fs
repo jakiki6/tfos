@@ -23,6 +23,6 @@ val acpi-rsdp
   klog-nl
 
   LIT" [*] acpi version: " klog
-  acpi-rsdp 15 + c@ tty-buf utils-printn
+  acpi-rsdp 15 + c@ klog-buf utils-printn
   klog-nl
 ;
