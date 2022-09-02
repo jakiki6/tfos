@@ -2,7 +2,7 @@ from .x64.backend import backend
 from backends import word
 
 class struct_field(object):
-    def __init__(self, offset, lvl):
+    def __init__(self, offset, lvl=0):
         self.offset = offset
         self.lvl = lvl
 
@@ -51,14 +51,12 @@ def struct(buf, binary, imm, dict, links, back):
             break
 
         length = word(buf)
-        if length.count("*") == len(length):
-            lvl = len(length)
+        if length == "*":
             length = 8
         else:
             length = int(length)
-            lvl = 0
 
-        imm[f"{name}/{field}"] = struct_field(offset, lvl)
+        imm[f"{name}/{field}"] = struct_field(offset)
         offset += length
 imms["struct"] = struct
 
