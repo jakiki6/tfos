@@ -119,7 +119,7 @@ class X64Backend(Backend):
         binary.write(i(len(data), 4))
         binary.write(i(0x1000, 4))      # offset in file
         binary.write(bytes(12))         # relocations
-        binary.write(i(0x60000020, 4))  # characteristics
+        binary.write(i(0xe0000020, 4))  # characteristics
 
         '''
         binary.write(b".data\x00\x00\x00\x00")
