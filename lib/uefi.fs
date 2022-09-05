@@ -1,7 +1,7 @@
 struct s-uefi-systable {
   header 24
   firmware-vendor *
-  firmware-revision 4
+  firmware-revision 8
   console-in-handle *
   con-in *
   console-out-handle *

@@ -19,8 +19,7 @@ include arch/x64/dev/vesa.fs
 ( early debugging )
 dev-serial-init
 
-LIT" [*] uefi systable: " klog uefi-systable klog-buf utils-printh klog-nl
-LIT" [*] uefi oem: " klog uefi-systable s-uefi-systable/firmware-vendor klog-buf utils-print16 klog-nl
+uefi-init
 
 begin again
 
