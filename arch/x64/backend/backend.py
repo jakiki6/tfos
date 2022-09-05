@@ -1,4 +1,4 @@
-import io, time
+import io
 
 from backends import *
 from . import immeds
@@ -83,7 +83,7 @@ class X64Backend(Backend):
         binary.write(b("6486"))         # type
         binary.write(i(1, 2))           # sections
                                         # timestamp
-        binary.write(i(int(time.time()), 4))
+        binary.write(i(0xbac8531e, 4))
         binary.write(i(0, 8))
         binary.write(i(240, 2))         # size of optional header
         binary.write(i(0x202e, 2))      # characteristics
