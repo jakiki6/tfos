@@ -119,10 +119,10 @@ imms["val"] = val_word
 def to_word(buf, binary, imm, dict, links, back):
     name = word(buf)
     if name in dict:
-        back.compile_num(binary, dict[name] + 2)
+        back.compile_num(binary, dict[name] + 2, rel=True)
     else:
-        links[binary.tell()] = (name, "num")
-        back.compile_num(binary, 2, force_big=True)
+        links[binary.tell()] = name
+        back.compile_num(binary, 2, force_big=True, rel=True)
 
     back.compile_ref(binary, dict["!"])
 imms["to"] = to_word
@@ -130,19 +130,19 @@ imms["to"] = to_word
 def hyphen_word(buf, binary, imm, dict, links, back):
     name = word(buf)
     if name in dict:
-        back.compile_num(binary, dict[name])
+        back.compile_num(binary, dict[name], rel=True)
     else:
-        links[binary.tell()] = (name, "num")
-        back.compile_num(binary, 0, force_big=True)
+        links[binary.tell()] = name
+        back.compile_num(binary, 0, force_big=True, rel=True)
 imms["'"] = hyphen_word
 
 def valhyphen_word(buf, binary, imm, dict, links, back):
     name = word(buf)  
     if name in dict:
-        back.compile_num(binary, dict[name] + 2)
+        back.compile_num(binary, dict[name] + 2, rel=True)
     else:
-        links[binary.tell()] = (name, "num")
-        back.compile_num(binary, 2, force_big=True)
+        links[binary.tell()] = name
+        back.compile_num(binary, 2, force_big=True, rel=True)
 imms["v'"] = valhyphen_word
 
 def str_lit(buf, binary, imm, dict, links, back):
@@ -179,7 +179,8 @@ def str_lit(buf, binary, imm, dict, links, back):
         binary.write(len(content).to_bytes(4, "little"))
     addr = binary.tell()
     binary.write(content)
-    back.compile_num(binary, addr)
+    back.compile_num(binary, addr, rel=True)
+    
 imms["LIT\""] = str_lit
 
 def blob_word(buf, binary, imm, dict, links, back):
@@ -193,7 +194,7 @@ def blob_word(buf, binary, imm, dict, links, back):
         binary.write(len(content).to_bytes(4, "little"))
     addr = binary.tell()
     binary.write(content)
-    back.compile_num(binary, addr)
+    back.compile_num(binary, addr, rel=True)
 imms["blob"] = blob_word
 
 def bss_alloc_word(buf, binary, imm, dict, links, back):
@@ -207,17 +208,8 @@ def bss_alloc_word(buf, binary, imm, dict, links, back):
         binary.write(len(content).to_bytes(4, "little"))
     addr = binary.tell()
     binary.write(content)
-    back.compile_num(binary, addr)
+    back.compile_num(binary, addr, rel=True)
 imms["bss-alloc"] = bss_alloc_word
-
-def cookie_push_word(buf, binary, imm, dict, links, back):
-    binary.write(b("48B8"))
-    addr = binary.tell()
-    binary.write(random.randbytes(8))
-    binary.write(b("488945004883C50848B8"))
-    binary.write(addr.to_bytes(8, "little"))
-    binary.write(b("488945004883C508"))
-imms["cookie-push"] = cookie_push_word
 
 def apply(imm):
     for k, v in imms.items():

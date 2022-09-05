@@ -90,15 +90,15 @@ def compile(content, backend=backends.backends["x64"]):
             elif w in dict:
                 backend.compile_ref(binary, dict[w])
             else:
-                links[binary.tell()] = (w, "ref")
+                links[binary.tell()] = w
                 backend.compile_ref(binary, 0, force_big=True)
 
     for addr, link in links.items():
-        if not link[0] in dict:
+        if not link in dict:
             print(f"Unknown reference to word '{link[0]}'")
             exit(1)
 
-        backend.link(binary, addr, dict[link[0]], link[1])
+        backend.link(binary, addr, dict[link])
 
     if "DEBUG" in os.environ:
         for k, v in dict.items():

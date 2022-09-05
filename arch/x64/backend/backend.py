@@ -10,7 +10,7 @@ class X64Backend(Backend):
     strings = get_strings(name)
 
     def init(self, binary, imm, dict):
-        binary.base = self.base
+        binary.base = 0
 
         binary.write(self.strings["_start"])
         to_patch = binary.tell()
@@ -29,8 +29,12 @@ class X64Backend(Backend):
 
         immeds.apply(imm)
 
-    def compile_num(self, binary, n, force_big=False):
-        if -2**31 <= n < 2 ** 31 and not force_big:
+    def compile_num(self, binary, n, force_big=False, rel=False):
+        if rel:
+            binary.write(b("488D05"))
+            binary.write((n - binary.tell() - 4).to_bytes(4, "little", signed=True))
+            binary.write(b("48894500"))
+        elif -2**31 <= n < 2 ** 31 and not force_big:
             binary.write(b("48C74500"))
             binary.write(n.to_bytes(4, "little", signed=True))
         else:
@@ -40,7 +44,7 @@ class X64Backend(Backend):
 
         binary.write(b("4883C508"))
 
-    def compile_ref(self, binary, ref, force_big=False):
+    def compile_ref(self, binary, ref, force_big=True):
         if not force_big:
             offset = ref - binary.tell() - 5
             if not (offset < (-2 ** 31) or offset >= (2 ** 31)):
@@ -48,22 +52,20 @@ class X64Backend(Backend):
                 binary.write(offset.to_bytes(4, "little", signed=True))
                 return
 
-        binary.write(b("48B8"))
-        binary.write(ref.to_bytes(8, "little"))
+        binary.write(b("488D05"))
+        binary.write((ref - binary.tell() - 4).to_bytes(4, "little", signed=True))
         binary.write(b("FFD0"))
 
-    def link(self, binary, addr, ref, type):
+    def link(self, binary, addr, ref):
+        p = binary.tell()
         binary.seek(addr)
 
-        binary.write(b("48B8"))
-        offset = int.from_bytes(binary.read(8), "little")
-        binary.seek(binary.tell() - 8)
-        binary.write(((ref + offset) & (2 ** 64 - 1)).to_bytes(8, "little"))
+        binary.write(b("488D05"))
+        offset = int.from_bytes(binary.read(4), "little", signed=True)
+        binary.seek(binary.tell() - 4)
+        binary.write((ref + offset).to_bytes(4, "little", signed=True))
 
-        if type == "ref":
-            binary.write(b("FFD0"))
-        elif type == "num":
-            binary.write(b("488945004883C508"))
+        binary.seek(p)
 
     def wrap(self, data):
         binary = io.BytesIO()
