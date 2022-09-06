@@ -13,3 +13,51 @@ struct s-uefi-systable {
   num-table-entries 8
   config-table *
 }
+
+struct s-uefi-srv-boot {
+  header 24
+  raise-tpl *
+  restore-tpl *
+  allocate-pages *
+  free-pages *
+  get-memory-map *
+  allocate-pool *
+  free-pool *
+  create-event *
+  set-timer *
+  wait-for-event *
+  signal-event *
+  close-event *
+  check-event *
+  install-protocol-interface *
+  reinstall-protocol-interface *
+  uninstall-protocol-interface *
+  handle-protocol *
+  reserved *
+  register-protocol-notify *
+  locate-handle *
+  locate-device-path *
+  install-config-table *
+  load-image *
+  start-image *
+  exit *
+  unload-image *
+  exit-boot-srv *
+  get-next-monotonic-count *
+  stall *
+  set-watchdog-timer *
+  connect-controller *
+  disconnect-controller *
+  open-protocol *
+  close-protocol *
+  open-protocol-info *
+  protocols-per-handle *
+  locate-handle-buffer *
+  locate-protocol *
+  install-multiple-protocol-interfaces *
+  uninstall-multiple-protocol-interfaces *
+  calculate-crc32 *
+  copy-mem *
+  set-mem *
+  create-event-ex *
+}
