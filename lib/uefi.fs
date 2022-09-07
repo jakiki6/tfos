@@ -61,3 +61,20 @@ struct s-uefi-srv-boot {
   set-mem *
   create-event-ex *
 }
+
+struct s-uefi-srv-runtime {
+  get-time *
+  set-time *
+  get-wakeup-time *
+  set-wakeup-time *
+  set-virt-address-map *
+  convert-pointer *
+  get-var *
+  get-next-var-name *
+  set-var *
+  get-next-hight-monotonic-count *
+  reset-system *
+  update-capsule *
+  query-capsule-caps *
+  query-var-info *
+}
