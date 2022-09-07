@@ -44,7 +44,7 @@ class X64Backend(Backend):
 
         binary.write(b("4883C508"))
 
-    def compile_ref(self, binary, ref, force_big=True):
+    def compile_ref(self, binary, ref, force_big=False):
         if not force_big:
             offset = ref - binary.tell() - 5
             if not (offset < (-2 ** 31) or offset >= (2 ** 31)):
