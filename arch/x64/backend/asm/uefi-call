@@ -1,13 +1,18 @@
 bits 64
 
+mov rbx, rsp
+
 mov rax, qword [rbp-8]
-mov r9, qword [rbp-16]
-mov r8, qword [rbp-24]
-mov rdx, qword [rbp-32]
-mov rcx, qword [rbp-40]
-add rbp, 32
+push qword [rbp-16]
+push qword [rbp-24]
+mov r9, qword [rbp-32]
+mov r8, qword [rbp-40]
+mov rdx, qword [rbp-48]
+mov rcx, qword [rbp-56]
+add rbp, 48
 
 call rax
 
+mov rsp, rbx
 mov qword [rbp-8], rax
 ret

@@ -12,7 +12,7 @@ val uefi-srv-runtime
   uefi-systable s-uefi-systable/boot-services to uefi-srv-boot
   uefi-systable s-uefi-systable/runtime-services to uefi-srv-runtime
 
-  uefi-handle 0 0 0
+  uefi-handle 0 0 0 0 0
     uefi-srv-boot s-uefi-srv-boot/exit uefi-call
 
   LIT" [*] uefi: exit call returned " klog klog-buf utils-printh klog-nl
