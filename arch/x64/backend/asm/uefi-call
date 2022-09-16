@@ -14,5 +14,6 @@ add rbp, 48
 call rax
 
 mov rsp, rbx
+
 mov qword [rbp-8], rax
 ret

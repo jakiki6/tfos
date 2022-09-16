@@ -1,6 +1,6 @@
 bits 64
 
-lea rbp, [rsp - 0x10000]
+lea rbp, [rsp - 0x40000]
 
 mov qword [rbp], rcx
 mov qword [rbp+8], rdx

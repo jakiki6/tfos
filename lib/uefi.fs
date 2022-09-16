@@ -78,3 +78,12 @@ struct s-uefi-srv-runtime {
   query-capsule-caps *
   query-var-info *
 }
+
+struct s-uefi-memmap-desc {
+  type 4
+  pad 4
+  phys 8
+  virt 8
+  pages 8
+  attr 8
+}

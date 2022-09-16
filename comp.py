@@ -95,7 +95,7 @@ def compile(content, backend=backends.backends["x64"]):
 
     for addr, link in links.items():
         if not link in dict:
-            print(f"Unknown reference to word '{link[0]}'")
+            print(f"Unknown reference to word '{link}'")
             exit(1)
 
         backend.link(binary, addr, dict[link])

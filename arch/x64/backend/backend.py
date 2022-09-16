@@ -6,7 +6,6 @@ from . import immeds
 @register
 class X64Backend(Backend):
     name = "x64"
-    base = 0x200000
     strings = get_strings(name)
 
     def init(self, binary, imm, dict):
@@ -96,7 +95,7 @@ class X64Backend(Backend):
         binary.write(i(0x1000, 4))      # entry
         binary.write(i(0, 4))           # code base
                                         # image base
-        binary.write(i(self.base - 0x1000, 8))
+        binary.write(i(0, 8))
         binary.write(i(4096, 4))        # alignments
         binary.write(i(4096, 4))
         binary.write(bytes(16))         # reserved
