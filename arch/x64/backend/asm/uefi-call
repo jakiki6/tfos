@@ -2,6 +2,8 @@ bits 64
 
 mov rbx, rsp
 
+sub rsp, 0x80
+
 mov rax, qword [rbp-8]
 push qword [rbp-16]
 push qword [rbp-24]
@@ -14,6 +16,5 @@ add rbp, 40
 call rax
 
 mov rsp, rbx
-
 mov qword [rbp-8], rax
 ret

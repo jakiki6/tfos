@@ -6,6 +6,7 @@ val uefi-srv-runtime
 
 val uefi-memmap-size
 val uefi-memmap-ptr
+val uefi-memmap-count
 val uefi-memmap-key
 val uefi-memmap-desc-size
 val uefi-memmap-desc-ver
@@ -32,5 +33,6 @@ val uefi-memmap-desc-ver
       LIT" uefi: cannot obtain memory map" panic
     then
 
-  begin again
+  uefi-memmap-size uefi-memmap-desc-size / to uefi-memmap-count
+  LIT" [*] uefi: number of memory map entries: " klog uefi-memmap-count klog-buf utils-printh klog-nl
 ;
