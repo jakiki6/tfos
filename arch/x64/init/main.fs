@@ -20,7 +20,6 @@ include arch/x64/dev/vesa.fs
 dev-serial-init
 
 uefi-init
-LIT" [*] uefi: early init done\n" klog
 
 begin again
 

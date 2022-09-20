@@ -35,4 +35,11 @@ val uefi-memmap-desc-ver
 
   uefi-memmap-size uefi-memmap-desc-size / to uefi-memmap-count
   LIT" [*] uefi: number of memory map entries: " klog uefi-memmap-count klog-buf utils-printh klog-nl
+
+  uefi-handle uefi-memmap-key 0 0 0 0
+    uefi-srv-boot s-uefi-srv-boot/exit-boot-srv uefi-call if
+      LIT" uefi: cannot exit boot services" panic
+    then
+
+  LIT" [*] uefi: exited boot services\n" klog
 ;
