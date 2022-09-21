@@ -17,3 +17,11 @@
 : klog-buf
   dev-serial-buf
 ;
+
+: klog-s
+  $20 klog-c
+;
+
+: klog-h
+  klog-buf utils-printh
+;

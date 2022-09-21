@@ -42,4 +42,48 @@ val uefi-memmap-desc-ver
     then
 
   LIT" [*] uefi: exited boot services\n" klog
+
+  uefi-mem-init
+;
+
+val uefi-mem-tmp
+
+: uefi-mem-init
+
+  uefi-memmap-ptr
+  uefi-memmap-count do
+     dup s-uefi-memmap-desc/type @ 7 = if
+       dup s-uefi-memmap-desc/phys @ 
+       over s-uefi-memmap-desc/pages @ 12 <<
+       +
+       mem-mm-highest max to mem-mm-highest
+     then
+
+     uefi-memmap-desc-size +
+  loop
+
+  LIT" [*] mem: highest page: " klog mem-mm-highest klog-h klog-nl
+
+  mem-mm-highest 12 >> 7 + 3 >> $fff + 12 >> to uefi-mem-tmp
+
+  uefi-memmap-ptr
+  uefi-memmap-count do
+    dup s-uefi-memmap-desc/type @ 7 = if
+      dup s-uefi-memmap-desc/pages uefi-mem-tmp > if
+        dup s-uefi-memmap-desc/phys to mem-mm-ptr
+	dup s-uefi-memmap-desc/pages @ uefi-mem-tmp - s-uefi-memmap-desc/pages !
+	dup s-uefi-memmap-desc/phys @ uefi-mem-tmp + s-uefi-memmap-desc/phys !
+
+	-1 to uefi-mem-tmp
+      then
+    then
+
+    uefi-memmap-desc-size +
+  loop
+
+  mem-mm-ptr 0 = if
+    LIT" mem: cannot find an area for the bitmap" panic
+  then
+
+  LIT" [*] mem: bitmap address: " klog mem-mm-ptr klog-h klog-nl
 ;
