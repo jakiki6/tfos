@@ -14,6 +14,31 @@
   drop drop
 ;
 
+: mem-set ( addr count val -- )
+  swap do
+    2dup c!
+    swap 1+ swap
+  loop
+
+  2drop
+;
+
+: mem-wipe ( addr count -- )
+  $00 mem-set
+;
+
+: mem-copy ( src dest count )
+  swap rot>
+
+  do
+    2dup c@ swap c!
+
+    1+ swap 1+ swap
+  loop
+
+  2drop
+;
+
 : utils-printn ( n buf -- )
   ( I know recursion is bad but the maximal recursion depth you can get is 20 )
 

@@ -7,9 +7,9 @@ init:	; ( handler rbp rsp ticks -- )
 	mov rax, qword [rbp-16]
 	mov qword [rel handler_rsp], rax
 	mov rax, qword [rbp-24]
-    mov qword [rel handler_rbp], rax
+	mov qword [rel handler_rbp], rax
 	mov rax, qword [rbp-32]
-    mov qword [rel handler], rax
+	mov qword [rel handler], rax
 
 	sub rbp, 24
 	call .l

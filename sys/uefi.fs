@@ -34,7 +34,8 @@ val uefi-memmap-desc-ver
     then
 
   uefi-memmap-size uefi-memmap-desc-size / to uefi-memmap-count
-  LIT" [*] uefi: number of memory map entries: " klog uefi-memmap-count klog-buf utils-printh klog-nl
+  LIT" [*] uefi: number of memory map entries: " klog uefi-memmap-count klog-h klog-nl
+  LIT" [*] uefi: memory map descriptor size: " klog uefi-memmap-desc-size klog-h klog-nl
 
   uefi-handle uefi-memmap-key 0 0 0 0
     uefi-srv-boot s-uefi-srv-boot/exit-boot-srv uefi-call if
@@ -53,6 +54,8 @@ val uefi-mem-tmp
   uefi-memmap-ptr
   uefi-memmap-count do
      dup s-uefi-memmap-desc/type @ 7 = if
+       dup s-uefi-memmap-desc/phys klog-h klog-s dup s-uefi-memmap-desc/pages klog-h klog-nl
+
        dup s-uefi-memmap-desc/phys @ 
        over s-uefi-memmap-desc/pages @ 12 <<
        +
@@ -72,7 +75,7 @@ val uefi-mem-tmp
       dup s-uefi-memmap-desc/pages uefi-mem-tmp > if
         dup s-uefi-memmap-desc/phys to mem-mm-ptr
 	dup s-uefi-memmap-desc/pages @ uefi-mem-tmp - s-uefi-memmap-desc/pages !
-	dup s-uefi-memmap-desc/phys @ uefi-mem-tmp + s-uefi-memmap-desc/phys !
+	dup s-uefi-memmap-desc/phys @ uefi-mem-tmp + s-uefi-memmap-desc/phys ! 
 
 	-1 to uefi-mem-tmp
       then
@@ -86,4 +89,22 @@ val uefi-mem-tmp
   then
 
   LIT" [*] mem: bitmap address: " klog mem-mm-ptr klog-h klog-nl
+
+  mem-mm-ptr mem-mm-highest 12 >> 7 + 3 >> $fff + 12 >> mem-wipe
+
+  uefi-memmap-ptr
+  uefi-memmap-count do
+    dup s-uefi-memmap-desc/type @ 7 = if
+(      dup s-uefi-memmap-desc/phys klog-h klog-s dup s-uefi-memmap-desc/pages klog-h klog-nl )
+
+      dup s-uefi-memmap-desc/phys 12 >> 7 + 3 >> mem-mm-ptr +
+      over s-uefi-memmap-desc/pages 3 >>
+      $ff
+      mem-set
+    then
+
+    uefi-memmap-desc-size +
+  loop 
+
+  LIT" [*] mem: populated bitmap" klog klog-nl
 ;
