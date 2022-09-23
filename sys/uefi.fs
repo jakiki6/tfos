@@ -54,17 +54,17 @@ val uefi-mem-tmp
   uefi-memmap-ptr
   uefi-memmap-count do
      dup s-uefi-memmap-desc/type @ 7 = if
-       dup s-uefi-memmap-desc/phys klog-h klog-s dup s-uefi-memmap-desc/pages klog-h klog-nl
-
-       dup s-uefi-memmap-desc/phys @ 
-       over s-uefi-memmap-desc/pages @ 12 <<
-       +
-       mem-mm-highest max to mem-mm-highest
+       dup s-uefi-memmap-desc/phys 
+       over s-uefi-memmap-desc/pages 12 <<
+       + dup
+         mem-mm-highest max to mem-mm-highest
+	 uefi-mem-tmp + to uefi-mem-tmp
      then
 
      uefi-memmap-desc-size +
   loop
 
+  LIT" [*] mem: usable memory: " klog uefi-mem-tmp 10 >> klog-h LIT" kb\n" klog
   LIT" [*] mem: highest page: " klog mem-mm-highest klog-h klog-nl
 
   mem-mm-highest 12 >> 7 + 3 >> $fff + 12 >> to uefi-mem-tmp
@@ -74,8 +74,8 @@ val uefi-mem-tmp
     dup s-uefi-memmap-desc/type @ 7 = if
       dup s-uefi-memmap-desc/pages uefi-mem-tmp > if
         dup s-uefi-memmap-desc/phys to mem-mm-ptr
-	dup s-uefi-memmap-desc/pages @ uefi-mem-tmp - s-uefi-memmap-desc/pages !
-	dup s-uefi-memmap-desc/phys @ uefi-mem-tmp + s-uefi-memmap-desc/phys ! 
+	dup s-uefi-memmap-desc/pages uefi-mem-tmp - s-uefi-memmap-desc/pages !
+	dup s-uefi-memmap-desc/phys uefi-mem-tmp + s-uefi-memmap-desc/phys ! 
 
 	-1 to uefi-mem-tmp
       then
@@ -95,8 +95,6 @@ val uefi-mem-tmp
   uefi-memmap-ptr
   uefi-memmap-count do
     dup s-uefi-memmap-desc/type @ 7 = if
-(      dup s-uefi-memmap-desc/phys klog-h klog-s dup s-uefi-memmap-desc/pages klog-h klog-nl )
-
       dup s-uefi-memmap-desc/phys 12 >> 7 + 3 >> mem-mm-ptr +
       over s-uefi-memmap-desc/pages 3 >>
       $ff

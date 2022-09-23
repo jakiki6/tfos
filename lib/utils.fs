@@ -14,15 +14,6 @@
   drop drop
 ;
 
-: mem-set ( addr count val -- )
-  swap do
-    2dup c!
-    swap 1+ swap
-  loop
-
-  2drop
-;
-
 : mem-wipe ( addr count -- )
   $00 mem-set
 ;
