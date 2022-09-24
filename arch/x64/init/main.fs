@@ -21,15 +21,12 @@ dev-serial-init
 
 uefi-init
 
-begin again
-
-cpu-mem-init
-
+LIT" [*] cpu: initializing internal state...\n" klog
 cpu-paging-init
-
 cpu-gdt-init
 cpu-idt-init
 
+LIT" [*] sys: initializing subsystems...\n" klog
 base-init
 
 cpu-sched-init
@@ -38,22 +35,9 @@ sched-init
 dev-pit-init
 dev-pic-init
 
-fb-init
-
 cpu-irq-enable
 
-LIT" [*] booting tfos...\n" klog
-
-LIT" [*] memory map:\n" klog
-cpu-mem-e820-count >r begin
-  cpu-mem-e820-count r@ - 24 * cpu-mem-e820-head +
-    $20 tty-buf 2dup utils-printc utils-printc
-    dup @ klog-buf utils-printh $20 klog-c 8 +
-    dup @ klog-buf utils-printh $20 klog-c 8 +
-    d@ klog-buf utils-printh klog-nl
-next
-
-acpi-init
+LIT" [*] sys: done, booting tfos...\n" klog
 
 val init-wake
 val init-wake-addr
