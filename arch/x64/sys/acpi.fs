@@ -21,8 +21,4 @@ val acpi-rsdp
   LIT" [*] acpi oem: " klog
   acpi-rsdp 9 + 6 klog-w
   klog-nl
-
-  LIT" [*] acpi version: " klog
-  acpi-rsdp 15 + c@ klog-buf utils-printn
-  klog-nl
 ;

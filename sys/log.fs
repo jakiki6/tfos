@@ -25,3 +25,7 @@
 : klog-h
   klog-buf utils-printh
 ;
+
+: klog-d
+  klog-buf utils-printd
+;

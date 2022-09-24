@@ -30,7 +30,7 @@
   2drop
 ;
 
-: utils-printn ( n buf -- )
+: utils-printd ( n buf -- )
   ( I know recursion is bad but the maximal recursion depth you can get is 20 )
 
   b[
@@ -38,15 +38,17 @@
 
     2 # @ 10 /%
 
-	over if
-      over 1 # @ utils-printn
+    over if
+      over 1 # @ utils-printd
     then swap drop
 
     $30 + -1 # !
     -1 # 1 1 # @ buf-write drop
 
-    3 leave
+    drop
   ]b
+
+  2drop
 ;
 
 : utils-printh1 ( n buf -- )
