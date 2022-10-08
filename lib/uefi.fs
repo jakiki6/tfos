@@ -87,3 +87,8 @@ struct s-uefi-memmap-desc {
   pages *
   attr 8
 }
+
+val c-uefi-guid-gop
+  blob 9042a9de23dc4a3896fb7aded080516a
+    to c-uefi-guid-gop
+

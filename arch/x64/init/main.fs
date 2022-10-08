@@ -10,7 +10,6 @@ include arch/x64/cpu/idt.fs
 include arch/x64/cpu/sched.fs
 include arch/x64/cpu/mem.fs
 include arch/x64/cpu/paging.fs
-include arch/x64/sys/acpi.fs
 include arch/x64/dev/pit.fs
 include arch/x64/dev/pic.fs
 include arch/x64/dev/serial.fs

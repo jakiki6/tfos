@@ -11,9 +11,11 @@ val uefi-memmap-key
 val uefi-memmap-desc-size
 val uefi-memmap-desc-ver
 
+val uefi-prot-gop
+
 : uefi-init
-  LIT" [*] uefi: systable is at " klog uefi-systable klog-buf utils-printh klog-nl
-  LIT" [*] uefi: handle is " klog uefi-handle klog-buf utils-printh klog-nl
+  LIT" [*] uefi: systable is at " klog uefi-systable klog-h klog-nl
+  LIT" [*] uefi: handle is " klog uefi-handle klog-h klog-nl
   LIT" [*] uefi: oem: " klog uefi-systable s-uefi-systable/firmware-vendor klog-buf utils-print16 klog-nl
 
   uefi-systable s-uefi-systable/boot-services to uefi-srv-boot
@@ -26,7 +28,7 @@ val uefi-memmap-desc-ver
       LIT" uefi: cannot allocate buffer for memory map" panic
     then
 
-  LIT" [*] uefi: memory map is at " klog uefi-memmap-ptr klog-buf utils-printh LIT"  size " klog uefi-memmap-size klog-buf utils-printh klog-nl
+  LIT" [*] uefi: memory map is at " klog uefi-memmap-ptr klog-h LIT"  size " klog uefi-memmap-size klog-h klog-nl
 
   v' uefi-memmap-size uefi-memmap-ptr v' uefi-memmap-key v' uefi-memmap-desc-size v' uefi-memmap-desc-ver 0
     uefi-srv-boot s-uefi-srv-boot/get-memory-map uefi-call if
@@ -36,6 +38,14 @@ val uefi-memmap-desc-ver
   uefi-memmap-size uefi-memmap-desc-size / to uefi-memmap-count
   LIT" [*] uefi: number of memory map entries: " klog uefi-memmap-count klog-h klog-nl
   LIT" [*] uefi: memory map descriptor size: " klog uefi-memmap-desc-size klog-h klog-nl
+
+  ( locate GOP )
+  c-uefi-guid-gop 0 v' uefi-prot-gop 0 0 0
+    uefi-srv-boot s-uefi-srv-boot/locate-protocol uefi-call if
+      LIT" uefi: cannot locate GOP" panic
+    then
+
+  LIT" [*] uefi: GOP is at " klog uefi-prot-gop klog-h klog-nl
 
   uefi-handle uefi-memmap-key 0 0 0 0
     uefi-srv-boot s-uefi-srv-boot/exit-boot-srv uefi-call if
