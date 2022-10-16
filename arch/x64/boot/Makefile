@@ -11,7 +11,7 @@ all: ../os.img
 	sudo mount `cat loopback_dev`p1 img_mount
 	sudo mkdir -p img_mount/EFI/BOOT
 	sudo cp -v ../kernel.efi img_mount/EFI/BOOT/BOOTX64.EFI
-	sync
+	sync img_mount
 	sudo umount img_mount
 	sudo losetup -d `cat loopback_dev`
 	rm -rf loopback_dev img_mount

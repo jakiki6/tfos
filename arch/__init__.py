@@ -2,9 +2,10 @@ from .x64.backend import backend
 from backends import word
 
 class struct_field(object):
-    def __init__(self, offset, lvl):
+    def __init__(self, offset, lvl, width):
         self.offset = offset
         self.lvl = lvl
+        self.width = width
 
     def __call__(self, _buf, _binary, _imm, _dict, _links, _backend):
         _backend.compile_num(_binary, self.offset)
@@ -12,6 +13,8 @@ class struct_field(object):
 
         for i in range(0, self.lvl):
             _backend.compile_ref(_binary, _dict["@"])
+
+        _backend.compile_ref(_binary, _dict[{1: "c@", 2: "w@", 4: "d@", 8: "@"}[self.width]])
 
 imms = {}
 
@@ -50,16 +53,27 @@ def struct(buf, binary, imm, dict, links, back):
         if field == "}":
             break
 
-        length = word(buf)
-        if length.count("*") == len(length):
-            lvl = len(length)
-            length = 8
-        else:
-            length = int(length)
-            lvl = 0
+        lvl = 0
+        width = 8
 
-        imm[f"{name}/{field}"] = struct_field(offset, lvl)
-        offset += length
+        ftype = word(buf)
+        while True:
+            if len(ftype) == 0:
+                break
+
+            if ftype[0] == "*":
+                ftype = ftype[1:]
+                lvl += 1
+            else:
+                width = int(ftype)
+                break
+
+        imm[f"{name}/{field}"] = struct_field(offset, lvl, width)
+
+        if lvl == 0:
+            offset += width
+        else:
+            offset += 8
 imms["struct"] = struct
 
 def apply(imm):

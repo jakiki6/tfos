@@ -12,6 +12,7 @@ val uefi-memmap-desc-size
 val uefi-memmap-desc-ver
 
 val uefi-prot-gop
+val uefi-prot-gop-num-modes
 
 : uefi-init
   LIT" [*] uefi: systable is at " klog uefi-systable klog-h klog-nl
@@ -47,6 +48,9 @@ val uefi-prot-gop
 
   LIT" [*] uefi: GOP is at " klog uefi-prot-gop klog-h klog-nl
 
+  uefi-prot-gop s-uefi-prot-gop/mode s-uefi-prot-gop-mode/max-mode to uefi-prot-gop-num-modes
+  LIT" [*] uefi: number of GOP modes: " klog uefi-prot-gop-num-modes klog-d klog-nl
+
   uefi-handle uefi-memmap-key 0 0 0 0
     uefi-srv-boot s-uefi-srv-boot/exit-boot-srv uefi-call if
       LIT" uefi: cannot exit boot services" panic
@@ -63,7 +67,7 @@ val uefi-mem-tmp
 
   uefi-memmap-ptr
   uefi-memmap-count do
-     dup s-uefi-memmap-desc/type @ 7 = if
+     dup s-uefi-memmap-desc/type 7 = if
        dup s-uefi-memmap-desc/pages uefi-mem-tmp + to uefi-mem-tmp
 
        dup s-uefi-memmap-desc/phys 
@@ -82,7 +86,7 @@ val uefi-mem-tmp
 
   uefi-memmap-ptr
   uefi-memmap-count do
-    dup s-uefi-memmap-desc/type @ 7 = if
+    dup s-uefi-memmap-desc/type 7 = if
       dup s-uefi-memmap-desc/pages uefi-mem-tmp > if
         dup s-uefi-memmap-desc/phys to mem-mm-ptr
 	dup s-uefi-memmap-desc/pages uefi-mem-tmp - s-uefi-memmap-desc/pages !
@@ -105,7 +109,7 @@ val uefi-mem-tmp
 
   uefi-memmap-ptr
   uefi-memmap-count do
-    dup s-uefi-memmap-desc/type @ 7 = if
+    dup s-uefi-memmap-desc/type 7 = if
       dup s-uefi-memmap-desc/phys 12 >> 7 + 3 >> mem-mm-ptr +
       over s-uefi-memmap-desc/pages 3 >>
       $ff
