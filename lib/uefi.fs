@@ -89,6 +89,6 @@ struct s-uefi-memmap-desc {
 }
 
 val c-uefi-guid-gop
-  blob 9042a9de23dc4a3896fb7aded080516a
+  blob dea94290dc23384a96fb7aded080516a
     to c-uefi-guid-gop
 
